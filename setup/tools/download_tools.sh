@@ -21,20 +21,20 @@
 #  chmod u+x ./netbeans/${NETBEANS_INSTALLER}
 #  echo "...done"
 #fi
-
-if ! [ -d ./eclipse ]
-then
-  echo "Creating directory eclipse..."
-  mkdir -p ./eclipse
-  echo "...done"
-fi
-
-if ! [ -f ./eclipse/eclipse.tar.gz ]
-then
-  echo "Downloading eclipse package..."
-  wget -O .eclipse/eclipse.tar.gz --quied --tries=0 --continue http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/neon/1a/eclipse-jee-neon-1a-linux-gtk-x86_64.tar.gz
-  echo "...done"
-fi
+#
+#if ! [ -d ./eclipse ]
+#then
+#  echo "Creating directory eclipse..."
+#  mkdir -p ./eclipse
+#  echo "...done"
+#fi
+#
+#if ! [ -f ./eclipse/eclipse.tar.gz ]
+#then
+#  echo "Downloading eclipse package..."
+#  wget -O ./eclipse/eclipse.tar.gz --quiet --tries=0 --continue http://mirror.dkm.cz/eclipse/technology/epp/downloads/release/mars/2/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz
+#  echo "...done"
+#fi
 
 if ! [ -d ./wildfly ]
 then
