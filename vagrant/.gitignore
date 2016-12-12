@@ -1,0 +1,4 @@
+.vagrant/
+putty_private_key.ppk
+ssh.bat
+*.log
