@@ -8,10 +8,9 @@ then
   echo "MySQL Server is not installed, installing..."
 
   #setup of MySQL server root user password (to suppress interactive window during installation)
-  #export DEBIAN_FRONTEND=noninteractive
-  #debconf-set-selections <<< "mysql-community-server mysql-community-server/data-dir select ''"
-  #debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password MySQLRootPassword"
-  #debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password MySQLRootPassword"
+  export DEBIAN_FRONTEND=noninteractive
+  debconf-set-selections <<< "mysql-server-5.7 mysql-server/root_password password MySQLRootPassword"
+  debconf-set-selections <<< "mysql-server-5.7 mysql-server/root_password_again password MySQLRootPassword"
 
   #installation of MySQL database server
   apt-get install -y mysql-server libmysql-java
@@ -39,7 +38,7 @@ else
 fi
 
   
-mysql -u root -p MySQLRootPassword <<EOT
+mysql --user=root --password=MySQLRootPassword <<EOT
     DROP DATABASE IF EXISTS mydb;
     DROP USER IF EXISTS 'mysqluser'@'%';
     FLUSH PRIVILEGES;
