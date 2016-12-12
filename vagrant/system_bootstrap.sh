@@ -6,7 +6,7 @@ apt-get upgrade -y
 
 # environment installation
 cd /environment_setup/tools
-environment_install.sh
+./environment_install.sh
 
 # installation of putty tools to generate PuTTy private key
 apt-get install -y putty-tools

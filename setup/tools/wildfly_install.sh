@@ -13,7 +13,7 @@ apt-get install -y default-jdk
 if ! id wildfly
 then
   echo "Creating user wildfly..."
-  adduser --no-create-home --disabled-password --disabled-login --gecos "" wildfly
+  adduser --system --group --no-create-home --disabled-password --disabled-login --gecos "" wildfly
   echo "...done"
 else
   echo "No need to create user wildfly, already created."
