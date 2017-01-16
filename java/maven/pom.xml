@@ -13,5 +13,6 @@
     <module>hello-maven</module>
     <module>hello-maven-resources</module>
     <module>hello-maven-filtered-resources</module>
+    <module>hello-maven-manifest</module>
   </modules>
 </project>
