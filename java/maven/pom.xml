@@ -14,5 +14,6 @@
     <module>hello-maven-resources</module>
     <module>hello-maven-filtered-resources</module>
     <module>hello-maven-manifest</module>
+    <module>liquibase-maven</module>
   </modules>
 </project>
