@@ -50,6 +50,7 @@ mysql --user=root --password=MySQLRootPassword <<EOT
     CREATE DATABASE mydb;
     CREATE USER 'mysqluser'@'%' IDENTIFIED BY 'MySQLPassword';
     GRANT ALL PRIVILEGES ON *.* TO 'mysqluser'@'%';
+    GRANT GRANT OPTION ON *.* TO 'mysqluser'@'%';
     FLUSH PRIVILEGES;
 EOT
 
