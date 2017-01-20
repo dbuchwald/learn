@@ -6,6 +6,6 @@ HIBERNATE_REQUIRED_LIBS_DIR=~/dev/lib/hibernate
 
 mvn liquibase:update clean package
 
-java -cp ${HIBERNATE_REQUIRED_LIBS_DIR}/*:target/simple-jpa-app-1.0-SNAPSHOT.jar net.dbuchwald.learn.jpa.SimpleJpaApp
+java -cp ${HIBERNATE_REQUIRED_LIBS_DIR}/*:target/simple-jpa-app-derby-1.0-SNAPSHOT.jar net.dbuchwald.learn.jpa.SimpleJpaApp
 
 ./drop_schema.sh

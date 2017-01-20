@@ -5,11 +5,11 @@
   <persistence-unit name="simplejpaapp-unit" transaction-type="RESOURCE_LOCAL">  
     <class>net.dbuchwald.learn.jpa.model.Customer</class>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://localhost:3306/simplejpaapp" />
-      <property name="javax.persistence.jdbc.user" value="jpasqluser" />
-      <property name="javax.persistence.jdbc.password" value="MySQLPassword" />
+        value="jdbc:derby:/home/dawid/dev/databases/simpleDb" />
+      <property name="javax.persistence.jdbc.user" value="test" />
+      <property name="javax.persistence.jdbc.password" value="test" />
     </properties>
   </persistence-unit>
 </persistence>
