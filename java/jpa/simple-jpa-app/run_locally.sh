@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HIBERNATE_REQUIRED_LIBS_DIR=~/dev/lib/hibernate
+HIBERNATE_REQUIRED_LIBS_DIR=~/Documents/Development/libs
 
 ./create_schema.sh
 
