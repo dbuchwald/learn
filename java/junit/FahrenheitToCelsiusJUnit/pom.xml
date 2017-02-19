@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>FahrenheitToCelciusJUnit</artifactId>
+    <artifactId>FahrenheitToCelsiusJUnit</artifactId>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
