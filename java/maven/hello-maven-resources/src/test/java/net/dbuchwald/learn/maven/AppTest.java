@@ -1,4 +1,4 @@
-package net.dbuchwald.learn;
+package net.dbuchwald.learn.maven;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

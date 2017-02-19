@@ -1,4 +1,4 @@
-package net.dbuchwald.learn;
+package net.dbuchwald.learn.maven;
 
 /**
  * Hello world!
