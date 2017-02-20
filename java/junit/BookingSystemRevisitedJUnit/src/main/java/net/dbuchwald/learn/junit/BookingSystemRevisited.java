@@ -101,7 +101,14 @@ public class BookingSystemRevisited {
         ReservationEntry reservationEntry = new ReservationEntry(dayOfWeek, time);
 
         for (BookableResource resource: resources) {
-            if (!reservations.get(resource.getId()).contains(reservationEntry)) {
+            Set<ReservationEntry> currentReservations = reservations.get(resource.getId());
+            boolean conflictingReservationFound = false;
+            for (ReservationEntry currentReservation: currentReservations) {
+                if (currentReservation.equals(reservationEntry)) {
+                    conflictingReservationFound = true;
+                }
+            }
+            if (!conflictingReservationFound) {
                 result.add(resource);
             }
         }
