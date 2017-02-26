@@ -19,7 +19,10 @@ public class BookingSystemRevisitedTest {
 
     private static final int NUMBER_OF_CLASSROOMS_FOR_12_OR_MORE = 2;
     private static final int NUMBER_OF_CLASSROOMS = 3;
+    private static final int CAPACITY_8_PEOPLE = 8;
     private static final int CAPACITY_12_PEOPLE = 12;
+    private static final int CAPACITY_50_PEOPLE = 50;
+    private static final int CAPACITY_60_PEOPLE = 60;
     private static final int NUMBER_OF_CLASSROOMS_WITH_PHONE = 2;
     private static final int NUMBER_OF_CLASSROOMS_WITH_PHONE_AND_PROJECTOR = 1;
     private static final int TIME_12_OCLOCK = 12;
@@ -43,9 +46,9 @@ public class BookingSystemRevisitedTest {
         when(classroomB.getId()).thenReturn(CLASSROOM_B_ID);
         when(classroomLarge.getId()).thenReturn(CLASSROOM_LARGE_ID);
 
-        when(classroomA.getCapacity()).thenReturn(8);
-        when(classroomB.getCapacity()).thenReturn(12);
-        when(classroomLarge.getCapacity()).thenReturn(50);
+        when(classroomA.getCapacity()).thenReturn(CAPACITY_8_PEOPLE);
+        when(classroomB.getCapacity()).thenReturn(CAPACITY_12_PEOPLE);
+        when(classroomLarge.getCapacity()).thenReturn(CAPACITY_50_PEOPLE);
 
         classroomAEquipment.add(Equipment.PHONE);
         when(classroomA.getEquipment()).thenReturn(classroomAEquipment);
@@ -90,7 +93,7 @@ public class BookingSystemRevisitedTest {
 
     @Test
     public void listResourcesShouldEnableCapacitySearch() {
-        Set<BookableResource> resources = bookingSystem.listResources(CAPACITY_12_PEOPLE, null);
+        Set<BookableResource> resources = bookingSystem.listResources(CAPACITY_12_PEOPLE);
 
         assertEquals(NUMBER_OF_CLASSROOMS_FOR_12_OR_MORE, resources.size());
 
@@ -100,6 +103,16 @@ public class BookingSystemRevisitedTest {
 
     @Test
     public void listResourcesShouldEnableEquipmentSearch() {
+        Set<BookableResource> resources = bookingSystem.listResources(0, Equipment.PHONE);
+
+        assertEquals(NUMBER_OF_CLASSROOMS_WITH_PHONE, resources.size());
+
+        assertTrue(resources.contains(classroomA));
+        assertTrue(resources.contains(classroomLarge));
+    }
+
+    @Test
+    public void listResourcesShouldEnableSetOfEquipmentSearch() {
         Set<Equipment> equipment = new HashSet<>();
         equipment.add(Equipment.PHONE);
 
@@ -160,5 +173,59 @@ public class BookingSystemRevisitedTest {
 
         assertTrue(availableResources.contains(classroomA));
         assertTrue(availableResources.contains(classroomLarge));
+    }
+
+    @Test
+    public void bookingUsingCapacityAndEquipmentShouldBePossible() {
+        bookingSystem.bookResource(CAPACITY_12_PEOPLE, Equipment.PHONE, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+
+        Set<BookableResource> availableResources = bookingSystem.listAvailableResources(DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+
+        assertEquals(NUMBER_OF_CLASSROOMS - 1, availableResources.size());
+
+        assertTrue(availableResources.contains(classroomA));
+        assertTrue(availableResources.contains(classroomB));
+    }
+
+    @Test
+    public void bookingUsingCapacityAndSetOfEquipmentShouldBePossible() {
+        Set<Equipment> equipment = new HashSet<>();
+        equipment.add(Equipment.PHONE);
+        bookingSystem.bookResource(CAPACITY_12_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+
+        Set<BookableResource> availableResources = bookingSystem.listAvailableResources(DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+
+        assertEquals(NUMBER_OF_CLASSROOMS - 1, availableResources.size());
+
+        assertTrue(availableResources.contains(classroomA));
+        assertTrue(availableResources.contains(classroomB));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void doubleBookingShouldNotBeAllowed() {
+        bookingSystem.bookResource(CAPACITY_12_PEOPLE, Equipment.PHONE, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+
+        bookingSystem.bookResource(CLASSROOM_LARGE_ID, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void bookingShouldThrowIANForAmbiguousReservation() {
+        bookingSystem.bookResource(CAPACITY_12_PEOPLE, Equipment.WHITEBOARD, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void bookingWithSetShouldThrowIANForAmbiguousReservation() {
+        Set<Equipment> equipment = new HashSet<>();
+        equipment.add(Equipment.PROJECTOR);
+        equipment.add(Equipment.WHITEBOARD);
+        bookingSystem.bookResource(CAPACITY_12_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void bookingWithSetShouldThrowIAEForNonExistingResource() {
+        Set<Equipment> equipment = new HashSet<>();
+        equipment.add(Equipment.PROJECTOR);
+        equipment.add(Equipment.WHITEBOARD);
+        bookingSystem.bookResource(CAPACITY_60_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
     }
 }
