@@ -1,3 +1,2 @@
 .DS_Store
-/java/jpa/simple-jpa-app/target/
-/java/jpa/simple-jpa-app-derby/target/
+.idea/
