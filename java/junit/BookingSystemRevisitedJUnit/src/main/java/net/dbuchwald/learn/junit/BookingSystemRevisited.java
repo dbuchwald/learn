@@ -1,6 +1,5 @@
 package net.dbuchwald.learn.junit;
 
-import java.awt.print.Book;
 import java.time.DayOfWeek;
 import java.util.*;
 
