@@ -3,7 +3,6 @@ package net.dbuchwald.learn.junit;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.print.Book;
 import java.time.DayOfWeek;
 import java.util.HashSet;
 import java.util.Set;

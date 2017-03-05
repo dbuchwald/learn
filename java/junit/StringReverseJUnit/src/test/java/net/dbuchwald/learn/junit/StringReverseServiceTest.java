@@ -30,9 +30,4 @@ public class StringReverseServiceTest {
     public void stringReverseShouldReturnReversedStrings(String s, String reversed_s) {
         assertEquals("Reversed string is not equal", reversed_s, StringReverseService.reverse(s));
     }
-//
-//    @Test(expected = NullPointerException.class)
-//    public void stringReverseShouldThrowNPEForNullString() {
-//        StringReverseService.reverse(null);
-//    }
 }
