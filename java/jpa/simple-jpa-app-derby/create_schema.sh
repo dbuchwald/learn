@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mkdir -p /home/dawid/dev/databases
+mkdir -p db
 
-rm -rf /home/dawid/dev/databases/simpleDb
+rm -rf db/simpleDb
 

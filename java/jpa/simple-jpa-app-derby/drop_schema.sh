@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rm -rf /home/dawid/dev/databases/simpleDb
+rm -rf db
