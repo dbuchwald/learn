@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>StringReverseJDKJunit</artifactId>
+    <artifactId>StringReverseJDKJUnit</artifactId>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
