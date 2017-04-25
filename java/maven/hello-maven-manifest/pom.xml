@@ -32,7 +32,7 @@
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <mainClass>net.dbuchwald.learn.App</mainClass>
+                            <mainClass>net.dbuchwald.learn.maven.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
