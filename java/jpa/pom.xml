@@ -17,6 +17,7 @@
     <modules>
         <module>simple-jpa-app</module>
         <module>simple-jpa-app-derby</module>
+        <module>simple-jpa-app-h2</module>
     </modules>
 
 </project>
