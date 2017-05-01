@@ -16,6 +16,7 @@
     <modules>
         <module>maven</module>
         <module>jpa</module>
+        <module>mybatis</module>
         <module>junit</module>
     </modules>
 
@@ -68,6 +69,11 @@
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>3.4.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
