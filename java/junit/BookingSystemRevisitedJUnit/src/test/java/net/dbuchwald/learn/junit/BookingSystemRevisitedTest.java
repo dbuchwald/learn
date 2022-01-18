@@ -1,14 +1,15 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 /**
@@ -39,7 +40,7 @@ public class BookingSystemRevisitedTest {
     private final Set<Equipment> classroomBEquipment = new HashSet<>();
     private final Set<Equipment> classroomLargeEquipment = new HashSet<>();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(classroomA.getId()).thenReturn(CLASSROOM_A_ID);
         when(classroomB.getId()).thenReturn(CLASSROOM_B_ID);
@@ -68,16 +69,14 @@ public class BookingSystemRevisitedTest {
         bookingSystem = new BookingSystemRevisited(resources);
     }
 
-    @SuppressWarnings("unused")
-    @Test (expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNullResources() {
-        BookingSystemRevisited bookingSystem = new BookingSystemRevisited(null);
+        assertThrows(IllegalArgumentException.class, () -> new BookingSystemRevisited(null));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectEmptyResources() {
-        BookingSystemRevisited bookingSystem = new BookingSystemRevisited(new HashSet<>());
+        assertThrows(IllegalArgumentException.class, () -> new BookingSystemRevisited(new HashSet<>()));
     }
 
     @Test
@@ -136,14 +135,14 @@ public class BookingSystemRevisitedTest {
         assertTrue(resources.contains(classroomLarge));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldRejectNonExistentResource() {
-        bookingSystem.bookResource(NON_EXISTING_CLASSROOM, DayOfWeek.MONDAY, TIME_12_OCLOCK);
+        assertThrows(IllegalArgumentException.class, () -> bookingSystem.bookResource(NON_EXISTING_CLASSROOM, DayOfWeek.MONDAY, TIME_12_OCLOCK));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldRejectInvalidTime() {
-        bookingSystem.bookResource(CLASSROOM_A_ID, DayOfWeek.THURSDAY, INVALID_TIME_27_OCLOCK);
+        assertThrows(IllegalArgumentException.class, () -> bookingSystem.bookResource(CLASSROOM_A_ID, DayOfWeek.THURSDAY, INVALID_TIME_27_OCLOCK));
     }
 
     @Test
@@ -200,31 +199,33 @@ public class BookingSystemRevisitedTest {
         assertTrue(availableResources.contains(classroomB));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void doubleBookingShouldNotBeAllowed() {
         bookingSystem.bookResource(CAPACITY_12_PEOPLE, Equipment.PHONE, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
 
-        bookingSystem.bookResource(CLASSROOM_LARGE_ID, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+        assertThrows(IllegalArgumentException.class, () ->
+                bookingSystem.bookResource(CLASSROOM_LARGE_ID, DayOfWeek.FRIDAY, TIME_12_OCLOCK));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldThrowIANForAmbiguousReservation() {
-        bookingSystem.bookResource(CAPACITY_12_PEOPLE, Equipment.WHITEBOARD, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+        assertThrows(IllegalArgumentException.class, () ->
+                bookingSystem.bookResource(CAPACITY_12_PEOPLE, Equipment.WHITEBOARD, DayOfWeek.FRIDAY, TIME_12_OCLOCK));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingWithSetShouldThrowIANForAmbiguousReservation() {
         Set<Equipment> equipment = new HashSet<>();
         equipment.add(Equipment.PROJECTOR);
         equipment.add(Equipment.WHITEBOARD);
-        bookingSystem.bookResource(CAPACITY_12_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+        assertThrows(IllegalArgumentException.class, () -> bookingSystem.bookResource(CAPACITY_12_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingWithSetShouldThrowIAEForNonExistingResource() {
         Set<Equipment> equipment = new HashSet<>();
         equipment.add(Equipment.PROJECTOR);
         equipment.add(Equipment.WHITEBOARD);
-        bookingSystem.bookResource(CAPACITY_60_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK);
+        assertThrows(IllegalArgumentException.class, () -> bookingSystem.bookResource(CAPACITY_60_PEOPLE, equipment, DayOfWeek.FRIDAY, TIME_12_OCLOCK));
     }
 }

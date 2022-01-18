@@ -1,24 +1,21 @@
 package net.dbuchwald.learn.junit;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by dawidbuchwald on 16.02.2017.
  */
-@RunWith(JUnitParamsRunner.class)
 public class RegexDigitParserTest {
 
     private RegexDigitParser regexDigitParser;
 
     private static final int NUMBER_OF_CONSECUTIVE_DIGITS = 3;
 
-    @SuppressWarnings("unused")
     private static Object[] getSampleCases() {
             return new Object[] {
                     new Object[] { "abc 12", "" },
@@ -27,7 +24,7 @@ public class RegexDigitParserTest {
             };
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         regexDigitParser = new RegexDigitParser(NUMBER_OF_CONSECUTIVE_DIGITS);
     }
@@ -37,9 +34,9 @@ public class RegexDigitParserTest {
         assertEquals(NUMBER_OF_CONSECUTIVE_DIGITS, regexDigitParser.getNumberOfConsecutiveDigits());
     }
 
-    @Test
-    @Parameters(method = "getSampleCases")
+    @ParameterizedTest
+    @MethodSource("getSampleCases")
     public void regexParserShouldExtractConsecutiveDigits(String input, String output) {
-        assertEquals("Incorrect result received", output, regexDigitParser.parse(input));
+        assertEquals(output, regexDigitParser.parse(input), "Incorrect result received");
     }
 }

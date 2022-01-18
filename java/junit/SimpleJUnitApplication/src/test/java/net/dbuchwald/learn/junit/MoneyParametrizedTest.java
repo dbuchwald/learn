@@ -1,19 +1,16 @@
 package net.dbuchwald.learn.junit;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by dawidbuchwald on 14.02.2017.
  */
-@RunWith(JUnitParamsRunner.class)
 public class MoneyParametrizedTest {
 
-    @SuppressWarnings("unused")
     private static Object[] getMoney() {
         return new Object[] {
                 new Object[] {10, "USD"},
@@ -21,8 +18,8 @@ public class MoneyParametrizedTest {
         };
     }
 
-    @Test
-    @Parameters(method = "getMoney")
+    @ParameterizedTest
+    @MethodSource("getMoney")
     public void constructorShouldSetAmountAndCurrency(int amount, String currency) {
         Money money = new Money(amount, currency);
 

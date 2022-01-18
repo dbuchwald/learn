@@ -1,8 +1,8 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,8 +19,6 @@ public class UserServiceImplTest {
 
     private static final String USER_PASSWORD = "Password";
     private static final String USER_PASSWORD_MD5 = "dc647eb65e6711e155375218212b3964";
-
-
 
     @Test
     public void assignPasswordShouldUpdateUserPassword() throws Exception {

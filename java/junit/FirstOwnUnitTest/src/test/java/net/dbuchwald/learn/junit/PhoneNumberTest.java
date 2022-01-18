@@ -1,10 +1,8 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by dawidbuchwald on 14.02.2017.
@@ -15,33 +13,31 @@ public class PhoneNumberTest {
     public void constructorShouldSetCountryCodePrefixAndNumber() {
         PhoneNumber phoneNumber = new PhoneNumber("+48", "22", "5265700");
 
-        assertEquals("Country code is not set correctly", "+48", phoneNumber.getCountryCode());
-        assertEquals("Prefix is not set correctly", "22", phoneNumber.getPrefix());
-        assertEquals("Number is not set correctly", "5265700", phoneNumber.getNumber());
+        assertEquals("+48", phoneNumber.getCountryCode(), "Country code is not set correctly");
+        assertEquals("22", phoneNumber.getPrefix(), "Prefix is not set correctly");
+        assertEquals("5265700", phoneNumber.getNumber(), "Number is not set correctly");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    @SuppressWarnings("unused")
+    @Test
     public void constructorShouldNotAcceptNullNumber() {
-        PhoneNumber phoneNumber = new PhoneNumber("+48", "22", null);
+        assertThrows(IllegalArgumentException.class, () -> new PhoneNumber("+48", "22", null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    @SuppressWarnings("unused")
+    @Test
     public void constructorShouldNotAcceptEmptyNumber() {
-        PhoneNumber phoneNumber = new PhoneNumber("+48", "22", "");
+        assertThrows(IllegalArgumentException.class, () -> new PhoneNumber("+48", "22", ""));
     }
 
     @Test
     public void constructorShouldAcceptNullCountryCode() {
         PhoneNumber phoneNumber = new PhoneNumber(null, "22", "5265700");
-        assertNotNull("Phone number not created correctly", phoneNumber);
+        assertNotNull(phoneNumber, "Phone number not created correctly");
     }
 
     @Test
     public void constructorShouldAcceptEmptyCountryCode() {
         PhoneNumber phoneNumber = new PhoneNumber("", "22", "5265700");
-        assertNotNull("Phone number not created correctly", phoneNumber);
+        assertNotNull(phoneNumber, "Phone number not created correctly");
     }
 
     @Test
@@ -49,7 +45,7 @@ public class PhoneNumberTest {
         PhoneNumber phoneNumber1 = new PhoneNumber("+48", "22", "5265700");
         PhoneNumber phoneNumber2 = new PhoneNumber("+1", "800", "CALLSAUL");
 
-        assertNotEquals("Phone numbers are equal", phoneNumber1, phoneNumber2);
+        assertNotEquals(phoneNumber1, phoneNumber2, "Phone numbers are equal");
     }
 
     @Test
@@ -57,6 +53,6 @@ public class PhoneNumberTest {
         PhoneNumber phoneNumber1 = new PhoneNumber("+48", "22", "5265700");
         PhoneNumber phoneNumber2 = new PhoneNumber("+48", "22", "5265700");
 
-        assertEquals("Phone numbers are not equal", phoneNumber1, phoneNumber2);
+        assertEquals(phoneNumber1, phoneNumber2, "Phone numbers are not equal");
     }
 }

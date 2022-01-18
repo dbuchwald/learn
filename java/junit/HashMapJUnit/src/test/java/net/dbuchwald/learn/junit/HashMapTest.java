@@ -1,26 +1,23 @@
 package net.dbuchwald.learn.junit;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Created by dawidbuchwald on 15.02.2017.
  */
-@RunWith(JUnitParamsRunner.class)
 public class HashMapTest {
 
     private Map<String, String> keyValueMap;
 
-    @SuppressWarnings("unused")
     private static Object[] getSampleEntriesGetPut() {
         return new Object[] {
                new Object[] { "1", "One" },
@@ -29,7 +26,6 @@ public class HashMapTest {
         };
     }
 
-    @SuppressWarnings("unused")
     private static Object[] getSampleEntriesPutPut() {
         return new Object[] {
                new Object[] { "1", "One", "Ein" },
@@ -38,29 +34,29 @@ public class HashMapTest {
         };
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         keyValueMap = new HashMap<>();
     }
 
-    @Test
-    @Parameters(method = "getSampleEntriesGetPut")
+    @ParameterizedTest
+    @MethodSource("getSampleEntriesGetPut")
     public void entriesStoredWithPutShouldBeRetrievedWithGet(String key, String value) {
         keyValueMap.put(key, value);
         //assertEquals("Stored value does not match parameter", value, );
         String retrievedValue = keyValueMap.get(key);
-        assertNotNull("Value for given key does not exist", retrievedValue);
-        assertEquals("Value retrieved for given key is not correct", value, retrievedValue);
+        assertNotNull(retrievedValue, "Value for given key does not exist");
+        assertEquals(value, retrievedValue, "Value retrieved for given key is not correct");
     }
 
-    @Test
-    @Parameters(method = "getSampleEntriesPutPut")
+    @ParameterizedTest
+    @MethodSource("getSampleEntriesPutPut")
     public void entriesShouldBeOverwrittenOnDuplicatePut(String key, String firstValue, String secondValue) {
         keyValueMap.put(key, firstValue);
         String previousValue = keyValueMap.put(key, secondValue);
-        assertEquals("Previous value is incorrect", firstValue, previousValue);
+        assertEquals(firstValue, previousValue, "Previous value is incorrect");
 
-        assertEquals("Incorrect value retrieved", secondValue, keyValueMap.get(key));
+        assertEquals(secondValue, keyValueMap.get(key), "Incorrect value retrieved");
     }
 
     @Test
@@ -68,17 +64,17 @@ public class HashMapTest {
         keyValueMap.put("1", "One");
         keyValueMap.put("2", "Two");
 
-        assertEquals("Two entries are expected in map", 2, keyValueMap.size());
+        assertEquals(2, keyValueMap.size(), "Two entries are expected in map");
         keyValueMap.clear();
-        assertEquals("No entries are expected in map after clear", 0, keyValueMap.size());
+        assertEquals(0, keyValueMap.size(), "No entries are expected in map after clear");
     }
 
     @Test
     public void nullKeyShouldBeAccepted() {
         keyValueMap.put(null, "null");
 
-        assertEquals("Map should contain single entry", 1, keyValueMap.size());
-        assertNotNull("It should be possible to retrieve value indexed by null", keyValueMap.get(null));
-        assertEquals("Value retrieved for null key should be correct", "null", keyValueMap.get(null));
+        assertEquals(1, keyValueMap.size(), "Map should contain single entry");
+        assertNotNull(keyValueMap.get(null), "It should be possible to retrieve value indexed by null");
+        assertEquals("null", keyValueMap.get(null), "Value retrieved for null key should be correct");
     }
 }

@@ -1,13 +1,12 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -31,7 +30,7 @@ public class RaceResultsEnhancedServiceTest {
     private final Client clientA = mock(Client.class, "clientA");
     private final Client clientB = mock(Client.class, "clientB");
 
-    @Before
+    @BeforeEach
     public void setUp() {
         categories.add(CATEGORY_F1);
         categories.add(CATEGORY_WRC);
@@ -45,10 +44,9 @@ public class RaceResultsEnhancedServiceTest {
         when(messageNASCAR.getText()).thenReturn("NASCAR Message");
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNullLoggingService() {
-        raceResults = new RaceResultsEnhancedService(null, categories);
+        assertThrows(IllegalArgumentException.class, () -> new RaceResultsEnhancedService(null, categories));
     }
 
     @Test
@@ -70,27 +68,25 @@ public class RaceResultsEnhancedServiceTest {
         assertEquals(NUMBER_OF_CATEGORIES, raceResults.getCategories().size());
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNullCategoriesList() {
-        raceResults = new RaceResultsEnhancedService(loggingService, null);
+        assertThrows(IllegalArgumentException.class, () -> new RaceResultsEnhancedService(loggingService, null));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectEmptyCategoriesList() {
-        raceResults = new RaceResultsEnhancedService(loggingService, new HashSet<>());
+        assertThrows(IllegalArgumentException.class, () -> new RaceResultsEnhancedService(loggingService, new HashSet<>()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void subscribeToInvalidCategoryShouldFail() {
-        raceResults.addSubscriber(clientA, CATEGORY_DOG_RACES);
+        assertThrows(IllegalArgumentException.class, () -> raceResults.addSubscriber(clientA, CATEGORY_DOG_RACES));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void unsubscribeFromNotSubscribedCategoryShouldFail() {
         raceResults.addSubscriber(clientA, CATEGORY_F1);
-        raceResults.removeSubscriber(clientA, CATEGORY_WRC);
+        assertThrows(IllegalArgumentException.class, () -> raceResults.removeSubscriber(clientA, CATEGORY_WRC));
     }
 
     @Test

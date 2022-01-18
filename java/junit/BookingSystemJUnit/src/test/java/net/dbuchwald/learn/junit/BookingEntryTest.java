@@ -1,12 +1,10 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by dawidbuchwald on 16.02.2017.
@@ -26,54 +24,48 @@ public class BookingEntryTest {
         assertEquals(VALID_TIME_15_00, bookingEntry.getEndTime());
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectEqualStartAndEndTime() {
-        BookingEntry bookingEntry = new BookingEntry(VALID_TIME_12_00, VALID_TIME_12_00);
+        assertThrows(IllegalArgumentException.class, () -> new BookingEntry(VALID_TIME_12_00, VALID_TIME_12_00));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectEndTimeBeforeStartTime() {
-        BookingEntry bookingEntry = new BookingEntry(VALID_TIME_13_00, VALID_TIME_12_00);
+        assertThrows(IllegalArgumentException.class, () -> new BookingEntry(VALID_TIME_13_00, VALID_TIME_12_00));
     }
 
-    @SuppressWarnings({"unused", "ConstantConditions"})
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNullStartTime() {
-        BookingEntry bookingEntry = new BookingEntry(null, VALID_TIME_13_00);
+        assertThrows(IllegalArgumentException.class, () -> new BookingEntry(null, VALID_TIME_13_00));
     }
 
-    @SuppressWarnings({"unused", "ConstantConditions"})
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNullEndTime() {
-        BookingEntry bookingEntry = new BookingEntry(VALID_TIME_12_00, null);
+        assertThrows(IllegalArgumentException.class, () -> new BookingEntry(VALID_TIME_12_00, null));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNonFullHourStartTime() {
-        BookingEntry bookingEntry = new BookingEntry(INVALID_TIME_13_15, VALID_TIME_14_00);
+        assertThrows(IllegalArgumentException.class, () -> new BookingEntry(INVALID_TIME_13_15, VALID_TIME_14_00));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNonFullHourEndTime() {
-        BookingEntry bookingEntry = new BookingEntry(VALID_TIME_13_00, INVALID_TIME_13_15);
+        assertThrows(IllegalArgumentException.class, () -> new BookingEntry(VALID_TIME_13_00, INVALID_TIME_13_15));
     }
 
     @Test
     public void equalsMethodShouldReturnTrueForEqualObjects() {
         BookingEntry bookingEntry1 = new BookingEntry(VALID_TIME_12_00, VALID_TIME_13_00);
         BookingEntry bookingEntry2 = new BookingEntry(VALID_TIME_12_00, VALID_TIME_13_00);
-        assertTrue(bookingEntry1.equals(bookingEntry2));
+        assertEquals(bookingEntry1, bookingEntry2);
     }
 
     @Test
     public void equalsMethodShouldReturnFalseForDifferentObjects() {
         BookingEntry bookingEntry1 = new BookingEntry(VALID_TIME_12_00, VALID_TIME_13_00);
         BookingEntry bookingEntry2 = new BookingEntry(VALID_TIME_13_00, VALID_TIME_14_00);
-        assertFalse(bookingEntry1.equals(bookingEntry2));
+        assertNotEquals(bookingEntry1, bookingEntry2);
     }
 
     @Test

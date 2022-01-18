@@ -1,19 +1,15 @@
 package net.dbuchwald.learn.junit;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by dawidbuchwald on 15.02.2017.
  */
-@RunWith(JUnitParamsRunner.class)
 public class StringReverseServiceTest {
 
-    @SuppressWarnings("unused")
     private static Object[] getTestData() {
         return new Object[] {
                 new Object[] { "a", "a" },
@@ -25,9 +21,9 @@ public class StringReverseServiceTest {
         };
     }
 
-    @Test
-    @Parameters(method = "getTestData")
+    @ParameterizedTest
+    @MethodSource("getTestData")
     public void stringReverseShouldReturnReversedStrings(String s, String reversed_s) {
-        assertEquals("Reversed string is not equal", reversed_s, StringReverseService.reverse(s));
+        assertEquals(reversed_s, StringReverseService.reverse(s), "Reversed string is not equal");
     }
 }

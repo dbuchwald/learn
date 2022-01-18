@@ -1,11 +1,9 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by dawidbuchwald on 15.02.2017.
@@ -27,7 +25,7 @@ public class PasswordValidatorServiceTest {
 
     private PasswordValidatorService passwordValidatorService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         passwordValidatorService = new PasswordValidatorService(MINIMUM_PASSWORD_LENGTH,
                                                                 MINIMUM_NUMBER_OF_DIGITS,
@@ -36,28 +34,28 @@ public class PasswordValidatorServiceTest {
 
     @Test
     public void constructorShouldSetUpValidatorFields() {
-        assertEquals("Incorrect minimum password length", MINIMUM_PASSWORD_LENGTH,
-                passwordValidatorService.getMinimumPasswordLength());
-        assertEquals("Incorrect minimum number of digits", MINIMUM_NUMBER_OF_DIGITS,
-                passwordValidatorService.getMinimumNumberOfDigits());
-        assertEquals("Incorrect set of required characters", REQUIRED_CHARACTERS,
-                passwordValidatorService.getRequiredCharacters());
+        assertEquals(MINIMUM_PASSWORD_LENGTH, passwordValidatorService.getMinimumPasswordLength(),
+                     "Incorrect minimum password length");
+        assertEquals(MINIMUM_NUMBER_OF_DIGITS, passwordValidatorService.getMinimumNumberOfDigits(),
+                     "Incorrect minimum number of digits");
+        assertEquals(REQUIRED_CHARACTERS, passwordValidatorService.getRequiredCharacters(),
+                     "Incorrect set of required characters");
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNonPositivePasswordLength() {
-        passwordValidatorService = new PasswordValidatorService(INVALID_MINIMUM_PASSWORD_LENGTH,
-                                                                MINIMUM_NUMBER_OF_DIGITS,
-                                                                REQUIRED_CHARACTERS);
+        assertThrows(IllegalArgumentException.class, () ->
+                     new PasswordValidatorService(INVALID_MINIMUM_PASSWORD_LENGTH,
+                                                  MINIMUM_NUMBER_OF_DIGITS,
+                                                  REQUIRED_CHARACTERS));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNegativeNumberOfDigits() {
-        passwordValidatorService = new PasswordValidatorService(MINIMUM_PASSWORD_LENGTH,
-                                                                INVALID_MINIMUM_NUMBER_OF_DIGITS,
-                                                                REQUIRED_CHARACTERS);
+        assertThrows(IllegalArgumentException.class, () ->
+                     new PasswordValidatorService(MINIMUM_PASSWORD_LENGTH,
+                                                  INVALID_MINIMUM_NUMBER_OF_DIGITS,
+                                                  REQUIRED_CHARACTERS));
     }
 
     @Test

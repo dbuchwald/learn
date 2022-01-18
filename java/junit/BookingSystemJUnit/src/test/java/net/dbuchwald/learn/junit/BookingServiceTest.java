@@ -1,13 +1,12 @@
 package net.dbuchwald.learn.junit;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Created by dawidbuchwald on 16.02.2017.
@@ -26,7 +25,7 @@ public class BookingServiceTest {
 
     private BookingService bookingService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         bookingService = new BookingService(BOOKING_RESOURCE_NAME);
     }
@@ -36,52 +35,50 @@ public class BookingServiceTest {
         assertEquals(BOOKING_RESOURCE_NAME, bookingService.getBookingResourceName());
     }
 
-    @SuppressWarnings({"unused", "ConstantConditions"})
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectNullResourceName() {
-        BookingService bookingService = new BookingService(null);
+        assertThrows(IllegalArgumentException.class, () -> new BookingService(null));
     }
 
-    @SuppressWarnings("unused")
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorShouldRejectEmptyResourceName() {
-        BookingService bookingService = new BookingService(EMPTY_BOOKING_RESOURCE_NAME);
+        assertThrows(IllegalArgumentException.class, () -> new BookingService(EMPTY_BOOKING_RESOURCE_NAME));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldBeRejectedForNullStartTime() {
-        bookingService.book(null, VALID_TIME_13_00);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(null, VALID_TIME_13_00));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldBeRejectedForNullEndTime() {
-        bookingService.book(VALID_TIME_12_00, null);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(VALID_TIME_12_00, null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldBeRejectedForNonFullHoursStart() {
-        bookingService.book(INVALID_TIME_12_15, VALID_TIME_14_00);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(INVALID_TIME_12_15, VALID_TIME_14_00));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingShouldBeRejectedForNonFullHoursEnd() {
-        bookingService.book(VALID_TIME_12_00, INVALID_TIME_14_00_05);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(VALID_TIME_12_00, INVALID_TIME_14_00_05));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void startTimeMustBeBeforeEndTime() {
-        bookingService.book(VALID_TIME_14_00, VALID_TIME_12_00);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(VALID_TIME_14_00, VALID_TIME_12_00));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void startTimeMustBeDifferentThanEndTime() {
-        bookingService.book(VALID_TIME_14_00, VALID_TIME_14_00);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(VALID_TIME_14_00, VALID_TIME_14_00));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void bookingPeriodsMustNotOverlap() {
         bookingService.book(VALID_TIME_12_00, VALID_TIME_14_00);
-        bookingService.book(VALID_TIME_13_00, VALID_TIME_15_00);
+        assertThrows(IllegalArgumentException.class, () -> bookingService.book(VALID_TIME_13_00, VALID_TIME_15_00));
     }
 
     @Test

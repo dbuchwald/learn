@@ -1,20 +1,17 @@
 package net.dbuchwald.learn.junit;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 import net.dbuchwald.learn.junit.FahrenheitCelsiusConverter;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by dawidbuchwald on 15.02.2017.
  */
-@RunWith(JUnitParamsRunner.class)
 public class FahrenheitCelsiusConverterTest {
 
-    @SuppressWarnings("unused")
     private static Object[] getSampleDataC2F() {
         return new Object[] {
                 new Object[] { 0, 32 },
@@ -23,7 +20,6 @@ public class FahrenheitCelsiusConverterTest {
         };
     }
 
-    @SuppressWarnings("unused")
     private static Object[] getSampleDataF2C() {
         return new Object[] {
                 new Object[] { 32, 0 },
@@ -46,15 +42,15 @@ public class FahrenheitCelsiusConverterTest {
         assertEquals(100, FahrenheitCelsiusConverter.toCelsius(212));
     }
 
-    @Test
-    @Parameters(method = "getSampleDataC2F")
+    @ParameterizedTest
+    @MethodSource("getSampleDataC2F")
     public void shouldConvertCelsiusToFahrenheit(int c, int f) {
-        assertEquals("Converted value is not correct", f, FahrenheitCelsiusConverter.toFahrenheit(c));
+        assertEquals(f, FahrenheitCelsiusConverter.toFahrenheit(c), "Converted value is not correct");
     }
 
-    @Test
-    @Parameters(method = "getSampleDataF2C")
+    @ParameterizedTest
+    @MethodSource("getSampleDataF2C")
     public void shouldConvertFahrenheitToCelsius(int f, int c) {
-        assertEquals("Converted value is not correct", c, FahrenheitCelsiusConverter.toCelsius(f));
+        assertEquals(c, FahrenheitCelsiusConverter.toCelsius(f), "Converted value is not correct");
     }
 }
