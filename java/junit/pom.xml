@@ -27,6 +27,7 @@
         <module>UserServiceJUnit</module>
         <module>BookingSystemRevisitedJUnit</module>
         <module>StringReverseJDKJUnit</module>
+        <module>Java8DateJUnit</module>
     </modules>
 
 </project>

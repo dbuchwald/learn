@@ -13,6 +13,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.junit.jupiter.version>5.8.2</org.junit.jupiter.version>
+        <org.assertj.version>3.21.0</org.assertj.version>
         <org.junit.jupiter.platform.version>1.8.2</org.junit.jupiter.platform.version>
         <org.mockito.version>4.2.0</org.mockito.version>
         <mysql.connector.java.version>8.0.16</mysql.connector.java.version>
@@ -53,6 +54,11 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
                 <version>${org.junit.jupiter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${org.assertj.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
