@@ -6,5 +6,5 @@ package net.dbuchwald.learn.junit;
 public enum Equipment {
     PROJECTOR,
     WHITEBOARD,
-    PHONE;
+    PHONE
 }

@@ -5,7 +5,7 @@ package net.dbuchwald.learn.junit;
  */
 public class PasswordValidatorClient {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         PasswordValidatorService service = new PasswordValidatorService(8, 1, "#".toCharArray());
 
         System.out.println(service.validatePassword("Kupaki1#"));

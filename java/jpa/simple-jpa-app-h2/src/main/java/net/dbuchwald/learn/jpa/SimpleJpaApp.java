@@ -15,10 +15,9 @@ import java.util.List;
 public class SimpleJpaApp 
 {
     private static final String PERSISTENCE_UNIT_NAME = "simplejpaapp-unit";
-    private static EntityManagerFactory factory;
 
     public static void main(String[] args) {
-        factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         EntityManager em = factory.createEntityManager();
         // read the existing entries and write to console
         TypedQuery<Customer> q = em.createQuery("select t from Customer t", Customer.class);
@@ -29,15 +28,6 @@ public class SimpleJpaApp
         System.out.println("Size: " + customerList.size());
 
         // create new todo
-        /*
-        em.getTransaction().begin();
-        Customer customer = new Customer();
-        customer.setId(new Long(4));
-        customer.setName("Jane Doe");
-        customer.setActive(false);
-        em.persist(customer);
-        em.getTransaction().commit();
-        */
 
         em.close();
         factory.close();

@@ -28,7 +28,7 @@ public class RegexDigitParser {
                     if (result.length() >0 ) {
                         result.append(", ");
                     }
-                    result.append(currentDigits.toString());
+                    result.append(currentDigits);
                 }
                 if (currentDigits.length() > 0) currentDigits = new StringBuilder();
             }

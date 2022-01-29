@@ -23,16 +23,12 @@ public class SimpleMyBatisApp
         } else {
             SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
-            SqlSession session = sqlSessionFactory.openSession();
-            try {
-                //Customer customer = session.selectOne("mybatis.mappers.CustomerMapper.selectCustomer", 1);
+            try (SqlSession session = sqlSessionFactory.openSession()) {
                 List<Customer> customers = session.selectList("mybatis.mappers.CustomerMapper.selectAllCustomers");
-                for (Customer customer: customers) {
+                for (Customer customer : customers) {
                     System.out.println(customer.toString());
                 }
                 System.out.println("Size: " + customers.size());
-            } finally {
-                session.close();
             }
         }
     }

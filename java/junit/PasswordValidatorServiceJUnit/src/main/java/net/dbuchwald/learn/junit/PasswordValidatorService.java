@@ -48,7 +48,10 @@ public class PasswordValidatorService {
             for (char required: requiredCharacters) {
                 boolean exists = false;
                 for (char c: password.toCharArray()) {
-                    if (c == required) exists=true;
+                    if (c == required) {
+                        exists = true;
+                        break;
+                    }
                 }
                 if (!exists) return false;
             }

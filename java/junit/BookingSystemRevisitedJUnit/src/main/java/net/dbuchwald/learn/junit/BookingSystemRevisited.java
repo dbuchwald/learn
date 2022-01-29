@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class BookingSystemRevisited {
 
-    private class ReservationEntry {
+    private static class ReservationEntry {
         private final DayOfWeek dayOfWeek;
         private final int hour;
 
@@ -156,6 +156,7 @@ public class BookingSystemRevisited {
             for (ReservationEntry currentReservation: currentReservations) {
                 if (currentReservation.equals(reservationEntry)) {
                     conflictingReservationFound = true;
+                    break;
                 }
             }
             if (!conflictingReservationFound) {

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class BookingService {
 
-    private String bookingResourceName;
+    private final String bookingResourceName;
     private final List<BookingEntry> bookings = new LinkedList<>();
 
     public BookingService(String bookingResourceName) {
