@@ -19,8 +19,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -47,6 +47,7 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <configuration>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
                 </configuration>
                 <executions>

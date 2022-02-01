@@ -35,19 +35,19 @@
 #  wget -O ./eclipse/eclipse.tar.gz --quiet --tries=0 --continue http://mirror.dkm.cz/eclipse/technology/epp/downloads/release/mars/2/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz
 #  echo "...done"
 #fi
-
-if ! [ -d ./wildfly ]
-then
-  echo "Creading directory wildfly..."
-  mkdir -p ./wildfly
-  echo "...done"
-fi
-
-if ! [ -f ./wildfly/${WILDFLY_PACKAGE} ]
-then
-  echo "Downloading WildFly package..."
-  wget -O ./wildfly/${WILDFLY_PACKAGE} --quiet --tries=0 --continue http://download.jboss.org/wildfly/${WILDFLY_VERSION}.Final/${WILDFLY_PACKAGE}
-  echo "...done"
-fi
+#
+#if ! [ -d ./wildfly ]
+#then
+#  echo "Creading directory wildfly..."
+#  mkdir -p ./wildfly
+#  echo "...done"
+#fi
+#
+#if ! [ -f ./wildfly/${WILDFLY_PACKAGE} ]
+#then
+#  echo "Downloading WildFly package..."
+#  wget -O ./wildfly/${WILDFLY_PACKAGE} --quiet --tries=0 --continue http://download.jboss.org/wildfly/${WILDFLY_VERSION}.Final/${WILDFLY_PACKAGE}
+#  echo "...done"
+#fi
 
 

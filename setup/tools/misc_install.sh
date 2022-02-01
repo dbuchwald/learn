@@ -5,5 +5,5 @@ then
   exit 1
 fi
 
-apt-get install -y maven vim 
+# apt-get install -y maven vim 
 

@@ -11,17 +11,17 @@ then
   exit 1
 fi
 
-if ! ./mysql_install.sh
+if ! ./mariadb_install.sh
 then
-  echo "ERROR: MySQL Server installation failed!"
+  echo "ERROR: MariaDB Server installation failed!"
   exit 1
 fi
 
-if ! ./wildfly_install.sh
-then
-  echo "ERROR: WildFly application server installation failed!"
-  exit 1
-fi
+#if ! ./wildfly_install.sh
+#then
+#  echo "ERROR: WildFly application server installation failed!"
+#  exit 1
+#fi
 
 if ! ./misc_install.sh
 then
