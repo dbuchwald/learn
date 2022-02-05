@@ -28,6 +28,7 @@
         <module>BookingSystemRevisitedJUnit</module>
         <module>StringReverseJDKJUnit</module>
         <module>Java8DateJUnit</module>
+        <module>ClasspathRootJUnit</module>
     </modules>
 
 </project>
