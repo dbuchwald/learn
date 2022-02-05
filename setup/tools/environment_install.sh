@@ -11,9 +11,15 @@ then
   exit 1
 fi
 
-if ! ./mariadb_install.sh
+#if ! ./mariadb_install.sh
+#then
+#  echo "ERROR: MariaDB Server installation failed!"
+#  exit 1
+#fi
+
+if ! ./mysql_install.sh
 then
-  echo "ERROR: MariaDB Server installation failed!"
+  echo "ERROR: MySQL Server installation failed!"
   exit 1
 fi
 

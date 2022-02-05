@@ -5,12 +5,11 @@
   <persistence-unit name="simplejpaapp-unit" transaction-type="RESOURCE_LOCAL">  
     <class>net.dbuchwald.learn.jpa.model.Customer</class>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mariadb://localhost:3306/simplejpaapp" />
+        value="jdbc:mysql://localhost:3306/simplejpaapp" />
       <property name="javax.persistence.jdbc.user" value="jpasqluser" />
-      <property name="javax.persistence.jdbc.password" value="MariaDBPassword" />
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB103Dialect"/>
+      <property name="javax.persistence.jdbc.password" value="MySQLPassword" />
     </properties>
   </persistence-unit>
 </persistence>

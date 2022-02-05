@@ -16,7 +16,7 @@
         <org.assertj.version>3.21.0</org.assertj.version>
         <org.junit.jupiter.platform.version>1.8.2</org.junit.jupiter.platform.version>
         <org.mockito.version>4.2.0</org.mockito.version>
-        <org.mariadb.java.client.version>2.7.5</org.mariadb.java.client.version>
+        <mysql.connector.java.version>8.0.28</mysql.connector.java.version>
         <org.apache.derby.version>10.15.2.0</org.apache.derby.version>
         <com.h2database.version>2.1.210</com.h2database.version>
         <org.liquibase.version>4.5.0</org.liquibase.version>
@@ -68,9 +68,9 @@
                 <version>${org.mockito.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mariadb.jdbc</groupId>
-                <artifactId>mariadb-java-client</artifactId>
-                <version>${org.mariadb.java.client.version}</version>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.connector.java.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.derby</groupId>

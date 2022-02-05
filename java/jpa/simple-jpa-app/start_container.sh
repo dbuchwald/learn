@@ -1,18 +1,18 @@
 #!/bin/sh
 
-docker run --detach --rm --name db_server -p 3306:3306 --env MARIADB_ROOT_PASSWORD=MariaDBRootPassword  mariadb:latest
+docker run --detach --rm --name db_server -p 3306:3306 --env MYSQL_ROOT_PASSWORD=MySQLRootPassword  mysql:latest
 
 printf "Waiting for container to start..."
-while ! mariadb --user=root --password=MariaDBRootPassword --protocol=tcp --host=localhost --no-beep --execute=exit 2>/dev/null; do :; printf "."; sleep 1; done
+while ! mysql --user=root --password=MySQLRootPassword --protocol=tcp --host=localhost --no-beep --execute=exit 2>/dev/null; do :; printf "."; sleep 1; done
 printf "done\n"
 
-mariadb --user=root --password=MariaDBRootPassword --protocol=tcp --host=localhost <<EOT
+mysql --user=root --password=MySQLRootPassword --protocol=tcp --host=localhost <<EOT
     DROP DATABASE IF EXISTS mydb;
-    DROP USER IF EXISTS 'mariadbuser'@'%';
+    DROP USER IF EXISTS 'mysqluser'@'%';
     FLUSH PRIVILEGES;
     CREATE DATABASE mydb;
-    CREATE USER 'mariadbuser'@'%' IDENTIFIED BY 'MariaDBPassword';
-    GRANT ALL PRIVILEGES ON *.* TO 'mariadbuser'@'%';
-    GRANT GRANT OPTION ON *.* TO 'mariadbuser'@'%';
+    CREATE USER 'mysqluser'@'%' IDENTIFIED BY 'MySQLPassword';
+    GRANT ALL PRIVILEGES ON *.* TO 'mysqluser'@'%';
+    GRANT GRANT OPTION ON *.* TO 'mysqluser'@'%';
     FLUSH PRIVILEGES;
 EOT
