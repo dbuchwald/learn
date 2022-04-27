@@ -1,0 +1,57 @@
+# This database change log contains all entries required to populate database
+
+databaseChangeLog:
+  - changeSet:
+      id: populate-languages
+      author: dbuchwald
+      changes:
+        - insert:
+            tableName: language
+            schemaName: refdata
+            columns:
+              - column:
+                  name: langId
+                  value: 'en'
+              - column:
+                  name: description
+                  value: 'English'
+        - insert:
+            tableName: language
+            schemaName: refdata
+            columns:
+              - column:
+                  name: langId
+                  value: 'pl'
+              - column:
+                  name: description
+                  value: 'Polski'
+  - changeSet:
+      id: populate-greetings
+      author: dbuchwald
+      changes:
+        - insert:
+            tableName: greeting
+            schemaName: refdata
+            columns:
+              - column:
+                  name: langId
+                  value: 'en'
+              - column:
+                  name: code
+                  value: 'hello'
+              - column:
+                  name: text
+                  value: 'Hello!'
+        - insert:
+            tableName: greeting
+            schemaName: refdata
+            columns:
+              - column:
+                  name: langId
+                  value: 'pl'
+              - column:
+                  name: code
+                  value: 'hello'
+              - column:
+                  name: text
+                  value: 'Cześć!'

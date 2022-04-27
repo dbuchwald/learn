@@ -1,0 +1,56 @@
+# This database change log contains all entries required to create database objects
+
+databaseChangeLog:
+  - changeSet:
+      id: create-languages-table
+      author: dawid.buchwald
+      changes:
+        - createTable:
+            tableName: language
+            schemaName: refdata
+            columns:
+              - column:
+                  name: langId
+                  type: varchar(2)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create-greetings-table
+      author: dawid.buchwald
+      changes:
+        - createTable:
+            tableName: greeting
+            schemaName: refdata
+            columns:
+              - column:
+                  name: langId
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: greeting
+            schemaName: refdata
+            columnNames: langId, code
+        - addForeignKey:
+            constraintName: greeting-language-fk
+            schemaName: refdata
+            baseTableName: greeting
+            baseColumnNames: langId
+            referencedTableName: language
+            referencedColumnNames: id
