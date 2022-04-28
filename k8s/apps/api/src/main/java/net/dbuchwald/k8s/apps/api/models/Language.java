@@ -7,18 +7,22 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name="languages", schema="refdata")
+@Table(name="languages", schema="ref_data")
 public class Language {
 
   @Id
-  @Column(name="lang_id")
+  @Column(name="lang_id", nullable = false)
   private String langId;
-  @Column(name="description")
+  @Column(name="description", nullable = false)
   private String description;
 
   public Language() {
     this.langId = "";
     this.description = "";
+  }
+
+  public Language(String langId) {
+    this.langId = langId;
   }
 
   public Language(String langId, String description) {
@@ -28,10 +32,6 @@ public class Language {
 
   public String getLangId() {
     return langId;
-  }
-
-  public void setLangId(String langId) {
-    this.langId = langId;
   }
 
   public String getDescription() {

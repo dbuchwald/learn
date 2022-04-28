@@ -7,7 +7,7 @@ databaseChangeLog:
       changes:
         - insert:
             tableName: languages
-            schemaName: refdata
+            schemaName: ref_data
             columns:
               - column:
                   name: lang_id
@@ -17,7 +17,7 @@ databaseChangeLog:
                   value: 'English'
         - insert:
             tableName: languages
-            schemaName: refdata
+            schemaName: ref_data
             columns:
               - column:
                   name: lang_id
@@ -25,13 +25,23 @@ databaseChangeLog:
               - column:
                   name: description
                   value: 'Polski'
+        - insert:
+            tableName: languages
+            schemaName: ref_data
+            columns:
+              - column:
+                  name: lang_id
+                  value: 'es'
+              - column:
+                  name: description
+                  value: 'Español'
   - changeSet:
       id: populate-greetings
       author: dbuchwald
       changes:
         - insert:
             tableName: greetings
-            schemaName: refdata
+            schemaName: ref_data
             columns:
               - column:
                   name: lang_id
@@ -44,7 +54,7 @@ databaseChangeLog:
                   value: 'Hello!'
         - insert:
             tableName: greetings
-            schemaName: refdata
+            schemaName: ref_data
             columns:
               - column:
                   name: lang_id
@@ -55,3 +65,16 @@ databaseChangeLog:
               - column:
                   name: text
                   value: 'Cześć!'
+        - insert:
+            tableName: greetings
+            schemaName: ref_data
+            columns:
+              - column:
+                  name: lang_id
+                  value: 'es'
+              - column:
+                  name: code
+                  value: 'hello'
+              - column:
+                  name: text
+                  value: 'Hola!'

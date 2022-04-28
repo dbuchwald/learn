@@ -7,14 +7,14 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: languages
-            schemaName: refdata
+            schemaName: ref_data
             columns:
               - column:
                   name: lang_id
                   type: varchar(2)
                   constraints:
-                    primaryKey: true
                     nullable: false
+                    primaryKey: true
               - column:
                   name: description
                   type: varchar(64)
@@ -26,7 +26,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: greetings
-            schemaName: refdata
+            schemaName: ref_data
             columns:
               - column:
                   name: lang_id
@@ -45,12 +45,15 @@ databaseChangeLog:
                     nullable: false
         - addPrimaryKey:
             tableName: greetings
-            schemaName: refdata
+            schemaName: ref_data
+            constraintName: pk_greetings
             columnNames: lang_id, code
-        - addForeignKey:
-            constraintName: greeting-language-fk
-            schemaName: refdata
+        - addForeignKeyConstraint:
+            constraintName: fk_greetings_lang_id
+            schemaName: ref_data
             baseTableName: greetings
+            baseTableSchemaName: ref_data
             baseColumnNames: lang_id
             referencedTableName: languages
+            referencedTableSchemaName: ref_data
             referencedColumnNames: lang_id
