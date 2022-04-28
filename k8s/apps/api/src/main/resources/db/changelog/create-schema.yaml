@@ -6,11 +6,11 @@ databaseChangeLog:
       author: dawid.buchwald
       changes:
         - createTable:
-            tableName: language
+            tableName: languages
             schemaName: refdata
             columns:
               - column:
-                  name: langId
+                  name: lang_id
                   type: varchar(2)
                   constraints:
                     primaryKey: true
@@ -25,11 +25,11 @@ databaseChangeLog:
       author: dawid.buchwald
       changes:
         - createTable:
-            tableName: greeting
+            tableName: greetings
             schemaName: refdata
             columns:
               - column:
-                  name: langId
+                  name: lang_id
                   type: varchar(2)
                   constraints:
                     nullable: false
@@ -44,13 +44,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            tableName: greeting
+            tableName: greetings
             schemaName: refdata
-            columnNames: langId, code
+            columnNames: lang_id, code
         - addForeignKey:
             constraintName: greeting-language-fk
             schemaName: refdata
-            baseTableName: greeting
-            baseColumnNames: langId
-            referencedTableName: language
-            referencedColumnNames: id
+            baseTableName: greetings
+            baseColumnNames: lang_id
+            referencedTableName: languages
+            referencedColumnNames: lang_id

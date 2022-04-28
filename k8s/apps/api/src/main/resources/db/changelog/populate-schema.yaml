@@ -6,21 +6,21 @@ databaseChangeLog:
       author: dbuchwald
       changes:
         - insert:
-            tableName: language
+            tableName: languages
             schemaName: refdata
             columns:
               - column:
-                  name: langId
+                  name: lang_id
                   value: 'en'
               - column:
                   name: description
                   value: 'English'
         - insert:
-            tableName: language
+            tableName: languages
             schemaName: refdata
             columns:
               - column:
-                  name: langId
+                  name: lang_id
                   value: 'pl'
               - column:
                   name: description
@@ -30,11 +30,11 @@ databaseChangeLog:
       author: dbuchwald
       changes:
         - insert:
-            tableName: greeting
+            tableName: greetings
             schemaName: refdata
             columns:
               - column:
-                  name: langId
+                  name: lang_id
                   value: 'en'
               - column:
                   name: code
@@ -43,11 +43,11 @@ databaseChangeLog:
                   name: text
                   value: 'Hello!'
         - insert:
-            tableName: greeting
+            tableName: greetings
             schemaName: refdata
             columns:
               - column:
-                  name: langId
+                  name: lang_id
                   value: 'pl'
               - column:
                   name: code
