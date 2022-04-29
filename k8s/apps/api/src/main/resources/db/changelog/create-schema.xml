@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+  <changeSet id="create_languages_table" author="dawid.buchwald">
+    <createTable tableName="languages" schemaName="ref_data">
+      <column name="lang_id" type="varchar(2)">
+        <constraints primaryKey="true" primaryKeyName="pk_languages" nullable="false"/>
+      </column>
+      <column name="description" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create_greetings_table" author="dawid.buchwald">
+    <createTable tableName="greetings" schemaName="ref_data">
+      <column name="lang_id" type="varchar(2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="code" type="varchar(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="text" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey constraintName="pk_greetings" tableName="greetings"
+                   columnNames="lang_id, code" schemaName="ref_data"/>
+    <addForeignKeyConstraint baseTableName="greetings" baseTableSchemaName="ref_data" baseColumnNames="lang_id"
+                             constraintName="fk_greetings_lang_id" referencedTableName="languages"
+                             referencedTableSchemaName="ref_data" referencedColumnNames="lang_id"/>
+  </changeSet>
+
+</databaseChangeLog>
