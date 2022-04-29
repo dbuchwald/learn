@@ -5,7 +5,6 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
-  <!--property name="shutdownEmbeddedDerby" value="false" dbms="derby"/-->
   <include file="classpath:/db/changelog/create-schema.xml"/>
   <include file="classpath:/db/changelog/populate-schema.xml"/>
 

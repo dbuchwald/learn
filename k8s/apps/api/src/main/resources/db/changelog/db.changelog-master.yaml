@@ -1,8 +1,0 @@
-# This database change log will create all the necessary tables for initial version of the application
-# and populate them with initial set of reference data
-
-databaseChangeLog:
-  - include:
-      file: "classpath:/db/changelog/create-schema.yaml"
-  - include:
-      file: "classpath:/db/changelog/populate-schema.yaml"
