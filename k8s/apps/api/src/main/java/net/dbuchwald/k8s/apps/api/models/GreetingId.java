@@ -1,7 +1,9 @@
 package net.dbuchwald.k8s.apps.api.models;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import net.dbuchwald.k8s.apps.api.models.constants.GreetingCode;
+import net.dbuchwald.k8s.apps.api.models.constants.LanguageIdentifier;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +15,10 @@ public class GreetingId implements Serializable {
 
   @Column(name = "code", nullable = false)
   private final String code;
+
+  public static GreetingId of(String langId, String code) {
+    return new GreetingId(langId, code);
+  }
 
   public GreetingId(String langId, String code) {
     this.langId = langId;

@@ -1,9 +1,8 @@
 package net.dbuchwald.k8s.apps.api.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import net.dbuchwald.k8s.apps.api.models.constants.LanguageIdentifier;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +12,7 @@ public class Language {
   @Id
   @Column(name="lang_id", nullable = false)
   private final String langId;
+
   @Column(name="description", nullable = false)
   private String description;
 
@@ -21,8 +21,8 @@ public class Language {
     this.description = "";
   }
 
-  public Language(String langId) {
-    this.langId = langId;
+  public static Language of(String langId, String description) {
+    return new Language(langId, description);
   }
 
   public Language(String langId, String description) {

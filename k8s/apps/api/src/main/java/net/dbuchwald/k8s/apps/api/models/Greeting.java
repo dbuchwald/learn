@@ -1,7 +1,5 @@
 package net.dbuchwald.k8s.apps.api.models;
 
-import org.hibernate.annotations.Proxy;
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -20,8 +18,9 @@ public class Greeting {
   public Greeting() {
   }
 
-  public Greeting(GreetingId greetingId) {
+  public Greeting(GreetingId greetingId, String text) {
     this.greetingId = greetingId;
+    this.text = text;
   }
 
   public GreetingId getGreetingId() {
