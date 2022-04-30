@@ -12,7 +12,7 @@ public class Language {
 
   @Id
   @Column(name="lang_id", nullable = false)
-  private String langId;
+  private final String langId;
   @Column(name="description", nullable = false)
   private String description;
 

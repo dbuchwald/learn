@@ -9,13 +9,10 @@ import java.util.Objects;
 public class GreetingId implements Serializable {
 
   @Column(name = "lang_id", nullable = false)
-  private String langId;
+  private final String langId;
 
   @Column(name = "code", nullable = false)
-  private String code;
-
-  public GreetingId() {
-  }
+  private final String code;
 
   public GreetingId(String langId, String code) {
     this.langId = langId;

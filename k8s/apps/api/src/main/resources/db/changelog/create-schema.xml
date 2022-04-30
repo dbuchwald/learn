@@ -5,6 +5,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
+  <changeSet id="create_application_schemas" author="dawid.buchwald">
+    <sql>create schema ref_data</sql>
+    <sql>create schema app_data</sql>
+  </changeSet>
+
   <changeSet id="create_languages_table" author="dawid.buchwald">
     <createTable tableName="languages" schemaName="ref_data">
       <column name="lang_id" type="varchar(2)">
