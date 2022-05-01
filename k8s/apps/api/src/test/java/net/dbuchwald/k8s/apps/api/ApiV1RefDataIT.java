@@ -61,8 +61,8 @@ public class ApiV1RefDataIT {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     Greeting result = response.getBody();
-    assertThat(result.getGreetingId().getLangId()).isEqualTo(LanguageIdentifier.SPANISH);
-    assertThat(result.getGreetingId().getCode()).isEqualTo(GreetingCode.HELLO);
+    assertThat(result.getGreetingId().langId()).isEqualTo(LanguageIdentifier.SPANISH);
+    assertThat(result.getGreetingId().code()).isEqualTo(GreetingCode.HELLO);
     assertThat(result.getText()).isEqualTo("Hola!");
   }
 
