@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name="languages", schema="ref_data")
+@Table(name="languages")
 public class Language {
 
   @Id

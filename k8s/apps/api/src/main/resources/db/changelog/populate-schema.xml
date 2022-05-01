@@ -6,32 +6,32 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
   <changeSet id="populate_languages" author="dawid.buchwald">
-    <insert tableName="languages" schemaName="ref_data">
+    <insert tableName="languages">
       <column name="lang_id">pl</column>
       <column name="description">Polski</column>
     </insert>
-    <insert tableName="languages" schemaName="ref_data">
+    <insert tableName="languages">
       <column name="lang_id">en</column>
       <column name="description">English</column>
     </insert>
-    <insert tableName="languages" schemaName="ref_data">
+    <insert tableName="languages">
       <column name="lang_id">es</column>
       <column name="description">Español</column>
     </insert>
   </changeSet>
 
   <changeSet id="populate_greetings" author="dawid.buchwald">
-    <insert tableName="greetings" schemaName="ref_data">
+    <insert tableName="greetings">
       <column name="lang_id">pl</column>
       <column name="code">hello</column>
       <column name="text">Cześć!</column>
     </insert>
-    <insert tableName="greetings" schemaName="ref_data">
+    <insert tableName="greetings">
       <column name="lang_id">en</column>
       <column name="code">hello</column>
       <column name="text">Hello!</column>
     </insert>
-    <insert tableName="greetings" schemaName="ref_data">
+    <insert tableName="greetings">
       <column name="lang_id">es</column>
       <column name="code">hello</column>
       <column name="text">Hola!</column>
