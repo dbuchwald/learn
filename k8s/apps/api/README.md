@@ -26,6 +26,10 @@ Running with custom database provider (h2/derby/mariadb)
 
 `mvn -Dspring-boot.run.profiles=mariadb spring-boot:run`
 
+Building Docker container
+
+`mvn package -Dbuild.docker.image`
+
 Running as a Docker container (after it's built)
 
 `docker run --rm --name api --publish 8080:8080 --env SPRING_PROFILES_ACTIVE=derby dawidbuchwald/k8s-learn-api-v1`
@@ -49,3 +53,15 @@ Running with Docker Compose:
 `docker-compose up -d`
 
 `docker-compose down`
+
+## Accessing application
+
+The following URLs can be used to play around with the application
+
+http://localhost:8080/actuator/health
+
+http://localhost:8080/api/v1/ref-data/languages
+
+http://localhost:8080/api/v1/ref-data/language/es
+
+http://localhost:8080/api/v1/ref-data/greeting/en/hello
