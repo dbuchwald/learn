@@ -1,6 +1,7 @@
 services:
   api:
     image: dawidbuchwald/k8s-learn-api-v1:latest
+    container_name: api-core
     restart: always
     ports:
       - 8080:8080
@@ -8,12 +9,21 @@ services:
       - api-net
     environment:
       - SPRING_PROFILES_ACTIVE=mariadb
-      - API_DATABASE_HOSTNAME=mariadb_api
+      - API_DATABASE_HOSTNAME=apidb
       - API_DATABASE_PORT=3306
       - API_DATABASE_USERNAME=api
       - API_DATABASE_PASSWORD=mypass
-  mariadb_api:
-    image: docker.io/library/mariadb:10.7
+    depends_on:
+      apidb:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent http://localhost:8080/actuator/health | jq --exit-status '.status == "UP"'
+      interval: 5s
+      retries: 6
+      start_period: 10s
+  apidb:
+    image: mariadb:10.7
+    container_name: api-db
     restart: always
     expose:
       - 3306
@@ -24,5 +34,10 @@ services:
       - MARIADB_PASSWORD=mypass
       - MARIADB_RANDOM_ROOT_PASSWORD=1
       - MARIADB_DATABASE=api
+    healthcheck:
+      test: mariadb-admin ping --silent --host localhost --user=$$MARIADB_USER --password=$$MARIADB_PASSWORD
+      interval: 5s
+      retries: 6
+      start_period: 10s
 networks:
   api-net:
