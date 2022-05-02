@@ -1,0 +1,12 @@
+FROM openjdk:17-jdk-alpine AS builder
+RUN apk --no-cache add maven
+WORKDIR /
+COPY src src
+COPY pom.xml pom.xml
+RUN mvn package
+
+FROM openjdk:17-jdk-alpine
+RUN apk --no-cache add curl jq
+WORKDIR /
+COPY --from=builder target/*.jar api.jar
+ENTRYPOINT ["java","-jar","api.jar"]
