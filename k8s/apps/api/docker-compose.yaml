@@ -1,0 +1,28 @@
+services:
+  api:
+    image: dawidbuchwald/k8s-learn-api-v1:latest
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - api-net
+    environment:
+      - SPRING_PROFILES_ACTIVE=mariadb
+      - API_DATABASE_HOSTNAME=mariadb_api
+      - API_DATABASE_PORT=3306
+      - API_DATABASE_USERNAME=api
+      - API_DATABASE_PASSWORD=mypass
+  mariadb_api:
+    image: docker.io/library/mariadb:10.7
+    restart: always
+    expose:
+      - 3306
+    networks:
+      - api-net
+    environment:
+      - MARIADB_USER=api
+      - MARIADB_PASSWORD=mypass
+      - MARIADB_RANDOM_ROOT_PASSWORD=1
+      - MARIADB_DATABASE=api
+networks:
+  api-net:
