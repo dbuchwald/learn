@@ -1,4 +1,4 @@
-# Sdocker build -f Dockerfile.standalone -t dawidbuchwald/k8s-learn-api-v1:latest .ample API application for k8s exercises
+# Sample API application for k8s exercises
 
 This repo contains all the object necessary for experimenting with
 application lifecycle management inside Kubernetes cluster. The point
