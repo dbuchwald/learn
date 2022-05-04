@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <title>API Testing application</title>
+</head>
+<body>
+<div class="container">
+  <div class="py-4">
+    <div class="row justify-content-center">
+      <div class="col-10 text-center">
+        <h1>API Testing application</h1>
+        <hr/>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-10">
+        <p>This application is to be used for testing only and as such is enabled only when <b>test</b>
+          Spring profile is active</p>
+        <hr/>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="row col-10 justify-content-between">
+        <div class="col-md-6 mb-3">
+          <div class="p-2 border rounded bg-light">
+            <form id="getGreeting">
+              <div class="col">
+                <label for="languageId" class="form-label">Language</label>
+                <select class="form-select mb-2" id="languageId" required>
+                  <option value="">Choose...</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid language.
+                </div>
+
+                <label for="greetingId" class="form-label">Greeting</label>
+                <select class="form-select mb-2" id="greetingId" required>
+                  <option value="">Choose...</option>
+                  <option value="hello">Hello</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid language.
+                </div>
+
+                <p class="mb-2">Pressing the button will fetch greeting for selected language using REST API.</p>
+
+                <button class="w-100 btn btn-primary" type="submit">Fetch greeting...</button>
+
+                <div id="resultPanel" class="collapse">
+                  <hr/>
+                  <label id="greetingLabel" for="greeting" class="form-label">Result from the server</label>
+                  <input type="text" class="form-control" id="greeting" readonly>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="border rounded bg-light p-2">
+            <p class="mb-0">This application is designed to test out simple mechanism for REST API verification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+  $.ajax({
+    type: "GET",
+    url: "/api/v1/ref-data/languages"
+  }).done(function (data) {
+    for (var i = 0; i<data.length; i++) {
+      $('#languageId').append('<option value="'+data[i].langId+'">'+data[i].description+'</option>');
+    }
+  });
+
+  $("#getGreeting").submit(function (event) {
+    var language = $("#languageId").val();
+    var greeting = $("#greetingId").val();
+
+    $.ajax({
+      type: "GET",
+      url: "/api/v1/ref-data/greeting/"+language+"/"+greeting,
+      encode: true,
+    }).done(function (data) {
+      $("#greeting").val(data.text);
+      $("#resultPanel").removeClass("collapse").addClass("collapse.show");
+    });
+
+    event.preventDefault();
+  });
+
+  $("#languageId").change(function () {
+    $("#resultPanel").removeClass("collapse.show").addClass("collapse");
+  });
+
+  $("#greetingId").change(function () {
+    $("#resultPanel").removeClass("collapse.show").addClass("collapse");
+  });
+
+});
+</script>
+</body>
+</html>

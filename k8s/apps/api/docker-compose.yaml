@@ -8,7 +8,7 @@ services:
     networks:
       - api-net
     environment:
-      - SPRING_PROFILES_ACTIVE=mariadb
+      - SPRING_PROFILES_ACTIVE=mariadb,test
       - API_DATABASE_HOSTNAME=apidb
       - API_DATABASE_PORT=3306
       - API_DATABASE_USERNAME=api
