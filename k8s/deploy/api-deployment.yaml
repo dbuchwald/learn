@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  selector:
+    matchLabels:
+      app: api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - image: dawidbuchwald/k8s-learn-api-v1:latest
+          imagePullPolicy: Never
+          name: api
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "mariadb,test"
+            - name: API_DATABASE_HOSTNAME
+              value: "apidb"
+            - name: API_DATABASE_PORT
+              value: "3306"
+            - name: API_DATABASE_USERNAME
+              value: "api"
+            - name: API_DATABASE_PASSWORD
+              value: "mypass"
+          ports:
+            - containerPort: 8080
+              name: api

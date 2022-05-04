@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apidb
+spec:
+  selector:
+    matchLabels:
+      app: apidb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: apidb
+    spec:
+      containers:
+        - image: mariadb:10.7
+          name: apidb
+          env:
+            - name: MARIADB_USER
+              value: "api"
+            - name: MARIADB_PASSWORD
+              value: "mypass"
+            - name: MARIADB_DATABASE
+              value: "api"
+            - name: MYSQL_RANDOM_ROOT_PASSWORD
+              value: "1"
+          ports:
+            - containerPort: 3306
+              name: apidb
+          volumeMounts:
+            - name: apidb-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: apidb-persistent-storage
+          persistentVolumeClaim:
+            claimName: apidb-pv-claim
