@@ -1,4 +1,4 @@
-# Sample API application for k8s exercises
+# Sdocker build -f Dockerfile.standalone -t dawidbuchwald/k8s-learn-api-v1:latest .ample API application for k8s exercises
 
 This repo contains all the object necessary for experimenting with
 application lifecycle management inside Kubernetes cluster. The point
@@ -26,9 +26,13 @@ Running with custom database provider (h2/derby/mariadb)
 
 `mvn -Dspring-boot.run.profiles=mariadb spring-boot:run`
 
-Building Docker container
+Building Docker container (with Maven, depends on Java/Maven available locally)
 
 `mvn package -Dbuild.docker.image`
+
+Building Docker container using multistage build (no Java/Maven required locally)
+
+`docker build -f Dockerfile.standalone -t dawidbuchwald/k8s-learn-api-v1:latest .`
 
 Running as a Docker container (after it's built)
 

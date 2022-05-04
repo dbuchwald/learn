@@ -3,3 +3,6 @@ RUN apk --no-cache add curl jq
 ARG JAR_FILE
 COPY target/${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
+EXPOSE 8080
+HEALTHCHECK --interval=5s --retries=6 \
+    CMD curl --fail --silent http://localhost:8080/actuator/health | jq --exit-status '.status == "UP"'

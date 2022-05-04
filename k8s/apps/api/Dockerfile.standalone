@@ -1,12 +1,31 @@
+# Use multistage build for compilation without Java/maven installed
+# The point of two maven package executions is to take advantage of Docker layering model - first execution
+# is used only to download all the necessary dependencies, and as long as pom.xml doesn't change, this image
+# will be cached by Docker and reused in following builds - assuming, of course, that the image wasn't pruned
+# in the meantime. In order to prevent repeated downloads on each source code change, this layer depends on
+# the checksum on pom.xml only, but since source code is not available, all the source-dependent stages (like
+# compile, test and spring-boot.repackage) must be skipped.
+#
+# Please note: since second build contains verify target it will still download artifacts that are used only
+# in test scope.
+#
+# One of the ideas to consider would be to split that build in two and tag the builder image separately to
+# prevent image pruning.
 FROM openjdk:17-jdk-alpine AS builder
 RUN apk --no-cache add maven
 WORKDIR /
-COPY src src
-COPY pom.xml pom.xml
-RUN mvn package
+COPY pom.xml .
+RUN mvn clean package -Dmaven.main.skip -Dmaven.test.skip -Dspring-boot.repackage.skip && rm -rf target
+COPY src ./src
+RUN mvn verify package
 
+# Final runtime image
+# Curl and jq are used for health validation
 FROM openjdk:17-jdk-alpine
 RUN apk --no-cache add curl jq
 WORKDIR /
 COPY --from=builder target/*.jar api.jar
 ENTRYPOINT ["java","-jar","api.jar"]
+EXPOSE 8080
+HEALTHCHECK --interval=5s --retries=6 \
+    CMD curl --fail --silent http://localhost:8080/actuator/health | jq --exit-status '.status == "UP"'
