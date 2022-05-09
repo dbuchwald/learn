@@ -7,7 +7,18 @@ This folder contains all the files required for `kubectl` based deployment of th
 Follow basic installation procedure refer to the [documentation](https://rancher.com/docs/k3s/latest/en/installation/install-options/).
 
 **PLEASE NOTE**: if running any RedHat-based Linux distro (RHEL/CentOS/Fedora Workstation) you have to
-disable **firewalld** service for the below to work.
+disable **firewalld** service for the below to work, according to the documentation. That being said, the following
+settings were sufficient to make it work with `firewalld` enabled (assuming FedoraWorkstation is the default zone):
+
+```shell
+sudo firewall-cmd --get-default-zone
+FedoraWorkstation
+
+sudo firewall-cmd --permanent --add-port=6443/tcp # flannel
+sudo firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 # pods
+sudo firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 # services
+sudo firewall-cmd --permanent --zone=FedoraWorkstation --add-service=http
+```
 
 ## Deployment of private Docker registry
 
