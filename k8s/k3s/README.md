@@ -18,6 +18,7 @@ sudo firewall-cmd --permanent --add-port=6443/tcp # flannel
 sudo firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 # pods
 sudo firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 # services
 sudo firewall-cmd --permanent --zone=FedoraWorkstation --add-service=http
+sudo firewall-cmd --reload
 ```
 
 ## Deployment of private Docker registry
