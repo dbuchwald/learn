@@ -3,7 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: apidb-pv-claim
 spec:
-  storageClassName: manual
+  storageClassName: ""
+  volumeName: apidb-pv-volume
   accessModes:
     - ReadWriteOnce
   resources:

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apache-hello
+  template:
+    metadata:
+      labels:
+        app: apache-hello
+        name: apache-hello
+    spec:
+      containers:
+        - name: apache-hello
+          image: httpd
+          ports:
+            - containerPort: 80

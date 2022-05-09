@@ -5,10 +5,15 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
+  storageClassName: ""
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/tmp/apidb"
+    path: "/var/k3s/default/apidb"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: apidb-pv-claim
+    namespace: default

@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: docker-registry
+  labels:
+    name: docker-registry

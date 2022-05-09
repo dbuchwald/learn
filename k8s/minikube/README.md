@@ -1,6 +1,7 @@
-# Basic k8s deployment objects
+# Basic k8s deployment objects (to be used with minikube, deprecated and not maintained anymore)
 
-This folder contains all the files required for `kubectl` based deployment of the application.
+This folder contains all the files required for `kubectl` based deployment of the application using minikube as K8S
+provider.
 
 ## Development and testing
 
@@ -20,7 +21,7 @@ Procedure to deploy API application in your Kubernetes cluster is a bit more com
 building Docker image for minikube:
 
 `eval $(minikube docker-env)` - this will set up environment variables for communication with minikube 
-docker instance
+Docker instance
 
 `cd ../apps/api/`
 

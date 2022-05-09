@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-hello-service
+  labels:
+    run: apache-hello
+spec:
+  selector:
+    app: apache-hello
+  ports:
+    - protocol: TCP
+      port: 80
