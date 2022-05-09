@@ -21,6 +21,21 @@ sudo firewall-cmd --permanent --zone=FedoraWorkstation --add-service=http
 sudo firewall-cmd --reload
 ```
 
+**PLEASE NOTE**: Reloading `firewalld` configuration will erase any runtime `iptables`
+changes introduced by `svclb-traefik`, preventing Ingress operation. You will notice
+that any attempt to connect to `localhost:80` will fail with "Connection refused", because
+even with the Ingress running, there is nothing listening on port 80/443. The way traffic
+is directed to Traefik is using runtime change implemented in iptables when DaemonSet 
+`svclb-traefik` is deployed.
+
+Therefore, after `firewalld` configuration reload you might not be able to use Ingress
+without restart. There is, however, other method: restart DaemonSet - it will inject
+iptables configuration again, restoring connectivity:
+
+```shell
+kubectl rollout restart -n kube-system ds/svclb-traefik
+```
+
 ## Deployment of private Docker registry
 
 When cluster is up and running, you need to set up private Docker registry, and it will be running inside
