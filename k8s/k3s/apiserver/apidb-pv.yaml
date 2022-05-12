@@ -2,18 +2,11 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: apidb-pv-volume
-  labels:
-    type: local
 spec:
-  storageClassName: ""
+  storageClassName: apidb-local
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
     path: "/var/k3s/api/apidb"
-  claimRef:
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    name: apidb-pv-claim
-    namespace: api

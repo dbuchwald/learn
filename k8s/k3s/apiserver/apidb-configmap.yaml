@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apidb-configuration
+  namespace: api
+data:
+  mariadb.database: api
+  mariadb.random_root_password: "1"
+

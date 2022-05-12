@@ -101,7 +101,7 @@ If all is running fine, you expect this command to work correctly: `curl -s http
 > for analysis and troubleshooting - it contains sample YAML files for deployment of minimal Apache-based
 > application with Service and Ingress configured.
 
-Before you can use the registry, however, you need to inform Docker that such a registry will be used
+Before you can use the registry, however, you need to inform Docker that such a registry will be used,
 and it will be used in insecure manner. Edit (or add, if doesn't exist) the following file: 
 `/etc/docker/daemon.json`
 
@@ -201,10 +201,14 @@ You can deploy the application using `apiserver/deploy.sh` script or execute com
 cd apiserver
 kubectl apply -f apidb-pv.yaml
 kubectl apply -f api-namespace.yaml
+kubectl apply -f apidb-storageclass.yaml
 kubectl apply -f apidb-pvc.yaml
+kubectl apply -f apidb-configmap.yaml
+kubectl apply -f apidb-secret.yaml
 kubectl apply -f apidb-deployment.yaml
 kubectl apply -f apidb-service.yaml
 
+kubectl apply -f api-configmap.yaml
 kubectl apply -f api-deployment.yaml
 kubectl apply -f api-service.yaml
 kubectl apply -f api-ingress.yaml

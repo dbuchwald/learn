@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configuration
+  namespace: api
+data:
+  api.runtime.profiles: "mariadb,test"
