@@ -32,11 +32,11 @@ Building Docker container (with Maven, depends on Java/Maven available locally)
 
 Building Docker container using multistage build (no Java/Maven required locally)
 
-`docker build -f Dockerfile.standalone -t dawidbuchwald/k8s-learn-api-v1:latest .`
+`docker build -f Dockerfile.standalone -t docker-registry.local/k8s-learn-api-v1:latest .`
 
 Running as a Docker container (after it's built)
 
-`docker run --rm --name api --publish 8080:8080 --env SPRING_PROFILES_ACTIVE=derby dawidbuchwald/k8s-learn-api-v1`
+`docker run --rm --name api --publish 8080:8080 --env SPRING_PROFILES_ACTIVE=derby docker-registry.local/k8s-learn-api-v1`
 
 Running both application and MariaDB in containers
 
@@ -44,7 +44,7 @@ Running both application and MariaDB in containers
 
 `docker run --rm --name mariadb_api --detach --network api-net --env MARIADB_USER=api --env MARIADB_PASSWORD=mypass --env MARIADB_RANDOM_ROOT_PASSWORD=1 --env MARIADB_DATABASE=api docker.io/library/mariadb:10.7`
 
-`docker run --rm --name api --detach --publish 8080:8080 --network api-net --env SPRING_PROFILES_ACTIVE=mariadb --env API_DATABASE_HOSTNAME=mariadb_api dawidbuchwald/k8s-learn-api-v1`
+`docker run --rm --name api --detach --publish 8080:8080 --network api-net --env SPRING_PROFILES_ACTIVE=mariadb --env API_DATABASE_HOSTNAME=mariadb_api docker-registry.local/k8s-learn-api-v1`
 
 `docker stop api`
 

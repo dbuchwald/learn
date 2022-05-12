@@ -14,7 +14,7 @@ spec:
         app: api
     spec:
       containers:
-        - image: dawidbuchwald/k8s-learn-api-v1:latest
+        - image: docker-registry.local/k8s-learn-api-v1:latest
           imagePullPolicy: Never
           name: api
           env:

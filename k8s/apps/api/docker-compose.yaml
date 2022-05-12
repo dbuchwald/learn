@@ -1,6 +1,6 @@
 services:
   api:
-    image: dawidbuchwald/k8s-learn-api-v1:latest
+    image: docker-registry.local/k8s-learn-api-v1:latest
     container_name: api-core
     restart: always
     ports:

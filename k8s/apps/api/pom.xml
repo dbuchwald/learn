@@ -115,7 +115,7 @@
             </executions>
             <configuration>
               <dockerfile>Dockerfile.maven</dockerfile>
-              <repository>dawidbuchwald/k8s-learn-api-v1</repository>
+              <repository>docker-registry.local/k8s-learn-api-v1</repository>
               <buildArgs>
                 <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
               </buildArgs>

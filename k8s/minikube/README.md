@@ -25,7 +25,7 @@ Docker instance
 
 `cd ../apps/api/`
 
-`docker build -f Dockerfile.standalone -t dawidbuchwald/k8s-learn-api-v1:latest .` - build Docker image
+`docker build -f Dockerfile.standalone -t docker-registry.local/k8s-learn-api-v1:latest .` - build Docker image
 for the minikube to use
 
 `cd ../../deploy`

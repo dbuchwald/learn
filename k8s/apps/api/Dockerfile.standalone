@@ -11,7 +11,7 @@
 #
 # One of the ideas to consider would be to split that build in two and tag the builder image separately to
 # prevent image pruning.
-FROM openjdk:17-jdk-alpine AS builder
+FROM docker-registry.local/base-17-jdk-alpine AS builder
 RUN apk --no-cache add maven
 WORKDIR /
 COPY pom.xml .
@@ -21,7 +21,7 @@ RUN mvn verify package
 
 # Final runtime image
 # Curl and jq are used for health validation
-FROM openjdk:17-jdk-alpine
+FROM docker-registry.local/base-17-jdk-alpine
 RUN apk --no-cache add curl jq
 WORKDIR /
 COPY --from=builder target/*.jar api.jar
