@@ -19,15 +19,22 @@ spec:
           name: api
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "mariadb,test"
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configuration
+                  key: api.runtime.profiles
             - name: API_DATABASE_HOSTNAME
               value: "apidb-service"
-            - name: API_DATABASE_PORT
-              value: "3306"
             - name: API_DATABASE_USERNAME
-              value: "api"
+              valueFrom:
+                secretKeyRef:
+                  name: apidb-credentials
+                  key: mariadb.username
             - name: API_DATABASE_PASSWORD
-              value: "mypass"
+              valueFrom:
+                secretKeyRef:
+                  name: apidb-credentials
+                  key: mariadb.password
           ports:
             - containerPort: 8080
               name: api

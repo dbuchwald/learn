@@ -19,16 +19,28 @@ spec:
           name: apidb
           env:
             - name: MARIADB_USER
-              value: "api"
+              valueFrom:
+                secretKeyRef:
+                  name: apidb-credentials
+                  key: mariadb.username
             - name: MARIADB_PASSWORD
-              value: "mypass"
+              valueFrom:
+                secretKeyRef:
+                  name: apidb-credentials
+                  key: mariadb.password
             - name: MARIADB_DATABASE
-              value: "api"
+              valueFrom:
+                configMapKeyRef:
+                  name: apidb-configuration
+                  key: mariadb.database
             - name: MYSQL_RANDOM_ROOT_PASSWORD
-              value: "1"
+              valueFrom:
+                configMapKeyRef:
+                  name: apidb-configuration
+                  key: mariadb.random_root_password
           ports:
-            - containerPort: 3306
-              name: apidb
+            - containerPort: 13306
+              name: apidb-port
           volumeMounts:
             - name: apidb-persistent-storage
               mountPath: /var/lib/mysql
