@@ -3,6 +3,7 @@
 kubectl delete -f api-ingress.yaml
 kubectl delete -f api-service.yaml
 kubectl delete -f api-deployment.yaml
+kubectl -n api delete secret apiserver-tls
 kubectl delete -f api-configmap.yaml
 
 kubectl delete -f apidb-service.yaml

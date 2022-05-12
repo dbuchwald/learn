@@ -18,6 +18,7 @@ sudo firewall-cmd --permanent --add-port=6443/tcp # flannel
 sudo firewall-cmd --permanent --zone=trusted --add-source=10.42.0.0/16 # pods
 sudo firewall-cmd --permanent --zone=trusted --add-source=10.43.0.0/16 # services
 sudo firewall-cmd --permanent --zone=FedoraWorkstation --add-service=http
+sudo firewall-cmd --permanent --zone=FedoraWorkstation --add-service=https
 sudo firewall-cmd --reload
 ```
 
@@ -35,6 +36,82 @@ iptables configuration again, restoring connectivity:
 ```shell
 kubectl rollout restart -n kube-system ds/svclb-traefik
 ```
+
+## Create your own root CA and domain certificates
+
+Go to `learn/k8s/ca` folder and run `gen_root_ca.sh` script to generate root CA certificate that will be used to sign
+all the domain certificates used later on:
+
+```shell
+./gen_root_ca.sh 
+Generating root CA key, please create password when prompted...
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+Generating root CA certificate, please enter the password when prompted...
+Enter pass phrase for kubernetes.local.root.ca.key:
+Root CA certificate created, import it into OS keystore
+```
+
+Make sure to remember the password, it will be needed whenever you need to generate new domain certificate.
+
+To be able to trust this newly created CA (and all domains signed by it), import root CA into OS truststore. For
+Fedora 36 it will be the following sequence of commands:
+
+```shell
+sudo cp kubernetes.local.root.ca.pem /etc/pki/ca-trust/source/anchors/
+sudo update-ca-trust
+```
+
+For other OSes it might differ. 
+
+**PLEASE NOTE**: Chrome browser, by default, doesn't use system CA store, so this
+certificate will have to be imported into application manually. This might apply to other browsers as well.
+
+Now, generate keys and certificates to be used by the domains: `docker-registry.local` and `apiserver.local`:
+
+```shell
+./gen_domain_cert.sh docker-registry.local
+Generating certificate private key...
+Generating certificate request file...
+Generating certificate request extension file...
+Generating certificate, please enter root CA password when prompted...
+Certificate request self-signature ok
+subject=C = PL, ST = Masovia, L = Warsaw, O = Home, CN = docker-registry.local
+Enter pass phrase for kubernetes.local.root.ca.key:
+```
+
+```shell
+./gen_domain_cert.sh apiserver.local
+Generating certificate private key...
+Generating certificate request file...
+Generating certificate request extension file...
+Generating certificate, please enter root CA password when prompted...
+Certificate request self-signature ok
+subject=C = PL, ST = Masovia, L = Warsaw, O = Home, CN = apiserver.local
+Enter pass phrase for kubernetes.local.root.ca.key:
+```
+
+You expect to see the following files in your folder:
+
+```shell
+ls -l
+total 48
+-rw-r--r--. 1 dawid dawid 1350 May 12 22:57 apiserver.local.crt
+-rw-r--r--. 1 dawid dawid  985 May 12 22:57 apiserver.local.csr
+-rw-r--r--. 1 dawid dawid  206 May 12 22:57 apiserver.local.ext
+-rw-------. 1 dawid dawid 1704 May 12 22:57 apiserver.local.key
+-rw-r--r--. 1 dawid dawid 1367 May 12 22:56 docker-registry.local.crt
+-rw-r--r--. 1 dawid dawid  993 May 12 22:56 docker-registry.local.csr
+-rw-r--r--. 1 dawid dawid  212 May 12 22:56 docker-registry.local.ext
+-rw-------. 1 dawid dawid 1704 May 12 22:56 docker-registry.local.key
+-rwxr-xr-x. 1 dawid dawid 1127 May 12 22:54 gen_domain_cert.sh
+-rwxr-xr-x. 1 dawid dawid  464 May 12 22:42 gen_root_ca.sh
+-rw-------. 1 dawid dawid 1854 May 12 22:56 kubernetes.local.root.ca.key
+-rw-r--r--. 1 dawid dawid 1302 May 12 22:56 kubernetes.local.root.ca.pem
+```
+
+These files will be picked up by the deployment scripts later on. Please, keep the files intact and do not regenerate
+them unless you are willing to import new root CA into your system repeatedly.
 
 ## Deployment of private Docker registry
 
@@ -58,6 +135,7 @@ cd docker-registry
 kubectl apply -f docker-pv.yaml
 kubectl apply -f docker-namespace.yaml
 kubectl apply -f docker-pvc.yaml
+kubectl create secret tls -n docker-registry docker-registry-tls --cert=../../ca/docker-registry.local.crt --key=../../ca/docker-registry.local.key
 kubectl apply -f docker-deployment.yaml
 kubectl apply -f docker-service.yaml
 kubectl apply -f docker-ingress.yaml
@@ -91,7 +169,7 @@ NAME                  STATUS   VOLUME                      CAPACITY   ACCESS MOD
 docker-registry-pvc   Bound    docker-registry-pv-volume   10Gi       RWO                           59m
 ```
 
-If all is running fine, you expect this command to work correctly: `curl -s http://docker-registry.local/v2/`
+If all is running fine, you expect this command to work correctly: `curl -s https://docker-registry.local/v2/`
 
 ```json
 {}
@@ -100,23 +178,6 @@ If all is running fine, you expect this command to work correctly: `curl -s http
 > In case you run into any issues with the Ingress whatsoever, you can use the `ingress-test` folder
 > for analysis and troubleshooting - it contains sample YAML files for deployment of minimal Apache-based
 > application with Service and Ingress configured.
-
-Before you can use the registry, however, you need to inform Docker that such a registry will be used,
-and it will be used in insecure manner. Edit (or add, if doesn't exist) the following file: 
-`/etc/docker/daemon.json`
-
-```json
-{
-  "insecure-registries" : ["docker-registry.local"]
-}
-```
-
-When done, reload daemon and restart it for the changes to be applied:
-
-```shell
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-```
 
 You can now build and tag the Docker image to be used by the API application:
 
@@ -133,60 +194,11 @@ docker push docker-registry.local/k8s-learn-api-v1:latest
 Operation should be successful, and to confirm, you can query the catalog using `curl` again:
 
 ```shell
-curl -s http://docker-registry.local/v2/_catalog
+curl -s https://docker-registry.local/v2/_catalog
 ```
 
 ```json
 {"repositories":["k8s-learn-api-v1"]}
-```
-
-Before K3S can use the new image, you have to inform it about the newly created registry. Create (or edit
-if exists) file `/etc/rancher/k3s/registries.yaml`:
-
-```yaml
-mirrors:
-  "docker-registry.local":
-    endpoint:
-      - "http://docker-registry.local"
-```
-
-You need to restart K3S for the change to take place:
-
-```shell
-sudo systemctl restart k3s
-```
-
-Verify using `sudo crictl info` command:
-
-```json
-{
-  "status": {
-  ...
-  },
-  "cniconfig": {
-  ...
-  },
-  "config": {
-    "containerd": {
-    },
-    "registry": {
-      "configPath": "",
-      "mirrors": {
-        "docker-registry.local": {
-          "endpoint": [
-            "http://docker-registry.local"
-          ],
-          "rewrite": null
-        }
-      },
-      "configs": null,
-      "auths": null,
-      "headers": null
-    },
-    ...
-  },
-  ...
-}
 ```
 
 ## API Application deployment
@@ -209,6 +221,7 @@ kubectl apply -f apidb-deployment.yaml
 kubectl apply -f apidb-service.yaml
 
 kubectl apply -f api-configmap.yaml
+kubectl create secret tls -n api apiserver-tls --cert=../../ca/apiserver.local.crt --key=../../ca/apiserver.local.key
 kubectl apply -f api-deployment.yaml
 kubectl apply -f api-service.yaml
 kubectl apply -f api-ingress.yaml
@@ -261,7 +274,7 @@ Since Docker registry and API server use the same Ingress on port 80, you need t
 services using the `Host` header. You could do the following:
 
 ```shell
-curl --header "Host: apiserver.local" http://localhost/api/v1/ref-data/languages
+curl --insecure --header "Host: apiserver.local" https://localhost/api/v1/ref-data/languages
 ```
 
 ```json
@@ -277,10 +290,10 @@ But to make it easier, you can edit `/etc/hosts` again, by adding:
 Making the calls easier:
 
 ```
-curl http://apiserver.local/api/v1/ref-data/languages
+curl https://apiserver.local/api/v1/ref-data/languages
 ```
 
-You can also test the application in your browser using dedicated web page <http://apiserver.local>
+You can also test the application in your browser using dedicated web page <https://apiserver.local>
 
 ## Cleaning up
 

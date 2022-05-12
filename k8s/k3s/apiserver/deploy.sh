@@ -10,8 +10,9 @@ kubectl apply -f apidb-deployment.yaml
 kubectl apply -f apidb-service.yaml
 
 kubectl apply -f api-configmap.yaml
+kubectl create secret tls -n api apiserver-tls --cert=../../ca/apiserver.local.crt --key=../../ca/apiserver.local.key
 kubectl apply -f api-deployment.yaml
 kubectl apply -f api-service.yaml
 kubectl apply -f api-ingress.yaml
 
-#curl -s http://apiserver.local/api/v1/ref-data/languages | jq
+#curl -s https://apiserver.local/api/v1/ref-data/languages | jq

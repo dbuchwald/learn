@@ -3,6 +3,7 @@
 kubectl apply -f docker-pv.yaml
 kubectl apply -f docker-namespace.yaml
 kubectl apply -f docker-pvc.yaml
+kubectl create secret tls -n docker-registry docker-registry-tls --cert=../../ca/docker-registry.local.crt --key=../../ca/docker-registry.local.key
 kubectl apply -f docker-deployment.yaml
 kubectl apply -f docker-service.yaml
 kubectl apply -f docker-ingress.yaml

@@ -6,6 +6,10 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
+  tls:
+  - hosts:
+    - docker-registry.local
+    secretName: docker-registry-tls
   rules:
   - host: docker-registry.local
     http:
