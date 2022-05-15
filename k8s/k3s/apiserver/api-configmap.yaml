@@ -5,3 +5,4 @@ metadata:
   namespace: api
 data:
   api.runtime.profiles: "mariadb,test"
+  api.database.url: "//apidb-service:3306/api"

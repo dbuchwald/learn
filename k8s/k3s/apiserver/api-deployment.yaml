@@ -23,8 +23,11 @@ spec:
                 configMapKeyRef:
                   name: api-configuration
                   key: api.runtime.profiles
-            - name: API_DATABASE_HOSTNAME
-              value: "apidb-service"
+            - name: API_DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configuration
+                  key: api.database.url
             - name: API_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
