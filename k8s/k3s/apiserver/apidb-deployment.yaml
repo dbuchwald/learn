@@ -39,7 +39,7 @@ spec:
                   name: apidb-configuration
                   key: mariadb.random_root_password
           ports:
-            - containerPort: 13306
+            - containerPort: 3306
               name: apidb-port
           volumeMounts:
             - name: apidb-persistent-storage
