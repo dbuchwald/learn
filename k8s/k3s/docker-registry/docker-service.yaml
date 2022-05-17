@@ -6,10 +6,10 @@ metadata:
   labels:
     run: docker-registry
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: docker-registry
   ports:
     - protocol: TCP
       port: 5000
-      nodePort: 30005
+      name: docker-registry

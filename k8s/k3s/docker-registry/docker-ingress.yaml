@@ -20,4 +20,4 @@ spec:
           service:
             name: docker-registry-service
             port:
-              number: 5000
+              name: docker-registry
