@@ -2,6 +2,7 @@
 CA_ROOT_FOLDER=/var/k3s/ca
 SYSTEM_CA_CERTS_FOLDER=/usr/local/share/ca-certificates/
 K3S_CA_CERT_FOLDER=${SYSTEM_CA_CERTS_FOLDER}/k3s
+DOCKER_REGISTRY_ROOT_FOLDER=/var/k3s/docker-registry
 
 # Start with system update
 sudo apt-get update
@@ -22,6 +23,9 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docke
 # Install Docker engine
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Add user to docker group 
+sudo usermod -aG docker $USER
 
 # Install kubectl repo GPG key
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -110,4 +114,138 @@ EOF
 # Install ClusterIssuer object
 kubectl apply -f k3s-root-ca.clusterissuer.yaml
 
+# Create folder for Docker registry
+sudo mkdir -p ${DOCKER_REGISTRY_ROOT_FOLDER}
 
+# Create entry in /etc/hosts file (inside VM)
+echo "127.0.0.1 docker-registry.local" | sudo tee -a /etc/hosts >/dev/null
+
+# Create Docker registry yaml file (with all the objects bundled)
+cat <<EOF > docker-registry.all.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: docker-registry-volume
+  namespace: docker-registry
+  labels:
+    type: local
+spec:
+  storageClassName: 
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "${DOCKER_REGISTRY_ROOT_FOLDER}"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: docker-registry-pvc
+    namespace: docker-registry
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: docker-registry
+  labels:
+    name: docker-registry
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docker-registry-pvc
+  namespace: docker-registry
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: 
+  volumeName: docker-registry-volume
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry
+  namespace: docker-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-registry
+  template:
+    metadata:
+      labels:
+        app: docker-registry
+        name: docker-registry
+    spec:
+      containers:
+      - name: docker-registry
+        image: registry:2
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - name: registry-volume
+          mountPath: /var/lib/registry
+          subPath: registry
+      volumes:
+        - name: registry-volume
+          persistentVolumeClaim:
+            claimName: docker-registry-pvc
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-registry-service
+  namespace: docker-registry
+  labels:
+    run: docker-registry
+spec:
+  type: ClusterIP
+  selector:
+    app: docker-registry
+  ports:
+    - protocol: TCP
+      port: 5000
+      name: docker-registry
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docker-registry-ingress
+  namespace: docker-registry
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: k3s-root-ca
+spec:
+  tls:
+  - hosts:
+    - docker-registry.local
+    secretName: docker-registry-tls
+  rules:
+  - host: docker-registry.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: docker-registry-service
+            port:
+              name: docker-registry
+
+EOF
+
+# Install docker-registry file
+kubectl apply -f docker-registry.all.yaml
