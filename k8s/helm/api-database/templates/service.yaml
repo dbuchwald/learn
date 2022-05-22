@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "api-database.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-database.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: api-db-port
+      protocol: TCP
+  selector:
+    {{- include "api-database.selectorLabels" . | nindent 4 }}

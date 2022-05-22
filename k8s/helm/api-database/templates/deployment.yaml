@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-database.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-database.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "api-database.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "api-database.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-database.fullname" . }}
+                  key: database.username
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-database.fullname" . }}
+                  key: database.password
+            - name: MARIADB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-database.fullname" . }}
+                  key: database.name
+            - name: MYSQL_RANDOM_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-database.fullname" . }}
+                  key: mariadb.random_root_password
+          ports:
+            - containerPort: 3306
+              name: api-db-port
+              protocol: TCP
+          volumeMounts:
+            - name: api-database-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: api-database-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "api-database.fullname" . }}

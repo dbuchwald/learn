@@ -4,8 +4,6 @@ metadata:
   name: apidb-pv-claim
   namespace: api
 spec:
-  storageClassName: apidb-local
-  volumeName: apidb-pv-volume
   accessModes:
     - ReadWriteOnce
   resources:

@@ -1,0 +1,35 @@
+
+
+# Database provider
+# Can be one of:
+# - h2 (memory)
+# - derby (disk)
+# - mariadb (disk, external pod will be created)
+database:
+  provider: "mariadb"
+  name: "api"
+  username: api
+  password: password
+  persistence:
+    enabled: true
+    volumeSize: 1Gi
+    storageClassName:
+    volumeName:
+
+# Default values for api-database.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: mariadb
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "10.7"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 3306

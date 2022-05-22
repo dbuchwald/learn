@@ -1,8 +1,8 @@
 #!/bin/sh
 
-kubectl apply -f apidb-pv.yaml
+#kubectl apply -f apidb-pv.yaml
 kubectl apply -f api-namespace.yaml
-kubectl apply -f apidb-storageclass.yaml
+#kubectl apply -f apidb-storageclass.yaml
 kubectl apply -f apidb-pvc.yaml
 kubectl apply -f apidb-configmap.yaml
 kubectl apply -f apidb-secret.yaml

@@ -11,6 +11,6 @@ kubectl delete -f apidb-deployment.yaml
 kubectl delete -f apidb-secret.yaml
 kubectl delete -f apidb-configmap.yaml
 kubectl delete -f apidb-pvc.yaml
-kubectl delete -f apidb-storageclass.yaml
+#kubectl delete -f apidb-storageclass.yaml
 kubectl delete -f api-namespace.yaml
-kubectl delete -f apidb-pv.yaml
+#kubectl delete -f apidb-pv.yaml
