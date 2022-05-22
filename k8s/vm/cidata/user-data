@@ -1,0 +1,19 @@
+#cloud-config
+runcmd:
+ - [eval, 'echo $(cat /proc/cmdline) "autoinstall" > /root/cmdline']
+ - [eval, 'mount -n --bind -o ro /root/cmdline /proc/cmdline']
+ - [eval, 'snap restart subiquity.subiquity-service']
+
+autoinstall:
+  version: 1
+  identity:
+    hostname: k3s.local
+    username: ubuntu
+    password: "$6$DHexmeO/2qF3D/f$dqs1uLtYQa87JfqX6upVmZfZ1lL0DMgzqpThAHTYIKkQ05L7Tg7BPbyygzFz4q2yxgsJTIihJgKQKZyDwjL8N/" # ubuntu
+  storage:
+    layout:
+      name: lvm
+  ssh:
+    install-server: yes
+  late-commands:
+    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
