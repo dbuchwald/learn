@@ -81,11 +81,11 @@ helm install \
   --version v1.8.0 \
   --set installCRDs=true
 
-# Generate secret file
+# Generate secret object
 ROOT_CA_CRT=`sudo cat ${CA_ROOT_FOLDER}/k3s.local.root.ca.pem | base64 -w0`
 ROOT_CA_KEY=`sudo cat ${CA_ROOT_FOLDER}/k3s.local.root.ca.key | base64 -w0`
 
-cat <<EOF > k3s-root-ca.secret.yaml
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Secret
 metadata:
@@ -96,11 +96,8 @@ data:
   tls.key: ${ROOT_CA_KEY}
 EOF
 
-# Install secret
-kubectl apply -f k3s-root-ca.secret.yaml
-
 # Generate ClusterIssuer object
-cat <<EOF > k3s-root-ca.clusterissuer.yaml
+cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -111,9 +108,6 @@ spec:
     secretName: k3s-root-ca
 EOF
 
-# Install ClusterIssuer object
-kubectl apply -f k3s-root-ca.clusterissuer.yaml
-
 # Create folder for Docker registry
 sudo mkdir -p ${DOCKER_REGISTRY_ROOT_FOLDER}
 
@@ -121,7 +115,7 @@ sudo mkdir -p ${DOCKER_REGISTRY_ROOT_FOLDER}
 echo "127.0.0.1 docker-registry.local" | sudo tee -a /etc/hosts >/dev/null
 
 # Create Docker registry yaml file (with all the objects bundled)
-cat <<EOF > docker-registry.all.yaml
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -247,5 +241,3 @@ spec:
 
 EOF
 
-# Install docker-registry file
-kubectl apply -f docker-registry.all.yaml
