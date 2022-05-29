@@ -5,9 +5,15 @@
 test:
   enabled: true
 database:
+  # possible values: mariadb, derby, h2
+  provider: h2
   databaseName: api
   username: api
   password: password
+  embedded: true
+  # make sure to match provider!
+  image: mariadb:10.7
+  port: 3306
   persistence:
     enabled: true
     volumeSize: 1Gi
@@ -44,20 +50,3 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
-mariadb:
-  enabled: true
-  image: mariadb:10.7
-  port: "3306"
-
-derby:
-  enabled: false
-  local: true
-  image:
-  port:
-
-h2:
-  enabled: false
-  local: true
-  image:
-  port:

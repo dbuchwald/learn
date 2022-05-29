@@ -44,3 +44,12 @@ spec:
           ports:
             - containerPort: 8080
               name: api-server
+{{- if and .Values.database.persistence.enabled .Values.database.embedded }}
+          volumeMounts:
+            - name: api-database-persistent-storage
+              mountPath: /var/apidb
+      volumes:
+        - name: api-database-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "api-database.fullname" . }}
+{{- end }}

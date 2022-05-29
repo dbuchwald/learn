@@ -1,4 +1,4 @@
-{{- if eq (include "api-server.database.detached" .) "true" }}
+{{- if not .Values.database.embedded }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,9 +7,9 @@ metadata:
   labels:
     {{- include "api-server.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.database.type }}
+  type: ClusterIP
   ports:
-    - port: {{ include "api-server.database.port" . }}
+    - port: {{ .Values.database.port }}
       targetPort: api-database
   selector:
     {{- include "api-server.selectorLabels" . | nindent 4 }}

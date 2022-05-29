@@ -9,6 +9,6 @@ data:
   api.runtime.profiles: {{ include "api-server.runtime.profiles" . }}
   api.database.url: {{ include "api-server.database.url" . }}
   database.name: {{ .Values.database.databaseName }}
-{{- if .Values.mariadb.enabled }}
+{{- if eq .Values.database.provider "mariadb" }}
   mariadb.random_root_password: "1"
 {{- end }}

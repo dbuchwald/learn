@@ -73,19 +73,7 @@ Create the name of the service account to use
 Create profiles template
 */}}
 {{- define "api-server.runtime.profiles" -}}
-{{- if .Values.mariadb.enabled }}
-{{- print "mariadb" }}
-{{- else }}
-{{- if .Values.derby.enabled }}
-{{- print "derby" }}
-{{- else -}}
-{{- if .Values.h2.enabled }}
-{{- print "h2" }}
-{{- else }}
-{{- print "none" }}
-{{- end }}
-{{- end }}
-{{- end }}
+{{- .Values.database.provider }}
 {{- if .Values.test.enabled }}
 {{- print ",test" }}
 {{- end }}
@@ -102,82 +90,40 @@ Create database hostname
 Create database URL
 */}}
 {{- define "api-server.database.url" -}}
-  {{- if .Values.mariadb.enabled }}
-    {{- printf "//%s" (include "api-server.database.hostname" .) }}
-    {{- if .Values.mariadb.port }}
-      {{- printf ":%s" .Values.mariadb.port }}
+  {{- if eq .Values.database.provider "mariadb" }}
+    {{- if .Values.database.embedded }}
+      {{- fail "MariaDB provider doesn't support embedded database" }}
+    {{- else }}
+      {{- printf "//%s" (include "api-server.database.hostname" .) }}
+      {{- if .Values.database.port }}
+        {{- printf ":%d" (.Values.database.port | int) }}
+      {{- end }}
+      {{- printf "/%s" .Values.database.databaseName }}
     {{- end }}
-    {{- printf "/%s" .Values.database.databaseName }}
   {{- else }}
-    {{- if .Values.derby.enabled }}
-      {{- if .Values.derby.local }}
-        {{- printf "/tmp/%s;create=true" .Values.database.databaseName }}
+    {{- if eq .Values.database.provider "derby" }}
+      {{- if .Values.database.embedded }}
+        {{- printf "/var/apidb/%s;create=true" .Values.database.databaseName }}
       {{- else }}
         {{- printf "//%s" (include "api-server.database.hostname" .) }}
-        {{- if .Values.derby.port }}
-          {{- printf ":%s" .Values.derby.port }}
+        {{- if .Values.database.port }}
+          {{- printf ":%d" (.Values.database.port | int) }}
         {{- end }}
         {{- printf "/%s" .Values.database.databaseName }}
       {{- end }}
     {{- else }}
-      {{- if .Values.h2.enabled }}
-        {{- if .Values.h2.local }}
-          {{- printf "mem:%s;DB_CLOSE_DELAY=-1" .Values.database.databaseName }}
+      {{- if eq .Values.database.provider "h2" }}
+        {{- if .Values.database.embedded }}
+          {{- printf "/var/apidb/%s;DB_CLOSE_DELAY=-1" .Values.database.databaseName }}
         {{- else }}
           {{- printf "//%s" (include "api-server.database.hostname" .) }}
-          {{- if .Values.h2.port }}
-            {{- printf ":%s" .Values.h2.port }}
+          {{- if .Values.database.port }}
+            {{- printf ":%d" (.Values.database.port | int) }}
           {{- end }}
           {{- printf "/%s" .Values.database.databaseName }}
         {{- end }}
       {{- else }}
-        {{- print "none:none/none" }}
-      {{- end }}
-    {{- end }}
-  {{- end }}
-{{- end }}
-
-{{/*
-Create database port
-*/}}
-{{- define "api-server.database.port" -}}
-  {{- if .Values.mariadb.enabled }}
-    {{- default .Values.mariadb.port 3306 -}}
-  {{- else }}
-    {{- if .Values.derby.enabled }}
-      {{- default .Values.derby.port 3306 -}}
-    {{- else }}
-      {{- if .Values.h2.enabled }}
-        {{- default .Values.h2.port 3306 -}}
-      {{- else }}
-        {{- print "0000" }}
-      {{- end }}
-    {{- end }}
-  {{- end }}
-{{- end }}
-
-{{/*
-Create detached database flag
-*/}}
-{{- define "api-server.database.detached" -}}
-  {{- if .Values.mariadb.enabled }}
-    {{- print true }}
-  {{- else }}
-    {{- if .Values.derby.enabled }}
-      {{- if .Values.derby.local }}
-        {{- print false }}
-      {{- else }}
-        {{- print true }}
-      {{- end }}
-    {{- else }}
-      {{- if .Values.h2.enabled }}
-        {{- if .Values.h2.local }}
-          {{- print false }}
-        {{- else }}
-          {{- print true }}
-        {{- end }}
-      {{- else }}
-        {{- print false }}
+        {{- fail "Unsupported database provider" }}
       {{- end }}
     {{- end }}
   {{- end }}
