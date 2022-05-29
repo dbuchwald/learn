@@ -49,14 +49,6 @@ spec:
                 configMapKeyRef:
                   name: {{ include "api-server.fullname" . }}
                   key: mariadb.random_root_password
-          ports:
-            - containerPort: 3306
-              name: api-database
-{{- if .Values.database.persistence.enabled }}
-          volumeMounts:
-            - name: api-database-persistent-storage
-              mountPath: /var/lib/mysql
-{{- end }}
 {{- end }}
 {{- if eq .Values.database.provider "derby" }}
             - name: DBNAME
@@ -69,16 +61,14 @@ spec:
                 secretKeyRef:
                   name: {{ include "api-server.fullname" . }}
                   key: database.username
+{{- end }}
           ports:
-            - containerPort: 1527
-              name: api-database
+            - name: api-database
+              containerPort: {{ include "api-server.database.containerPort" . }}
 {{- if .Values.database.persistence.enabled }}
           volumeMounts:
             - name: api-database-persistent-storage
-              mountPath: /dbs
-{{- end }}
-{{- end }}
-{{- if .Values.database.persistence.enabled }}
+              mountPath: {{ include "api-server.database.mountPath" . }}
       volumes:
         - name: api-database-persistent-storage
           persistentVolumeClaim:

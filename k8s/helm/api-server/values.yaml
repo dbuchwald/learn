@@ -14,6 +14,7 @@ database:
   # make sure to match provider if used!
   imageOverride:
   portOverride:
+  containerPortOverride:
   persistence:
     enabled: true
     volumeSize: 1Gi
@@ -23,12 +24,15 @@ database:
     mariadb:
       image: mariadb:10.7
       port: 3306
+      containerPort: 3306
     derby:
       image: adito/derby
       port: 1527
+      containerPort: 1527
     h2:
       image:
       port:
+      containerPort:
 
 image:
   repository: docker-registry.local/k8s-learn-api-v1

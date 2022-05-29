@@ -150,3 +150,37 @@ Create database port
     {{- end }}
   {{- end }}
 {{- end }}
+
+{{/*
+Create database container port
+*/}}
+{{- define "api-server.database.containerPort" -}}
+  {{- if .Values.database.containerPortOverride }}
+    {{- .Values.database.containerPortOverride }}
+  {{- else }}
+    {{- if eq .Values.database.provider "mariadb" }}
+      {{- .Values.database.defaults.mariadb.containerPort }}
+    {{- end }}
+    {{- if eq .Values.database.provider "derby" }}
+      {{- .Values.database.defaults.derby.containerPort }}
+    {{- end }}
+    {{- if eq .Values.database.provider "h2" }}
+      {{- .Values.database.defaults.h2.containerPort }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create database mount path
+*/}}
+{{- define "api-server.database.mountPath" -}}
+  {{- if eq .Values.database.provider "mariadb" }}
+    {{- print "/var/lib/mysql" }}
+  {{- end }}
+  {{- if eq .Values.database.provider "derby" }}
+    {{- print "/dbs" }}
+  {{- end }}
+  {{- if eq .Values.database.provider "h2" }}
+    {{- print "" }}
+  {{- end }}
+{{- end }}
