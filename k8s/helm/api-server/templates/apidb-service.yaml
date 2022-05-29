@@ -9,7 +9,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.database.port }}
+    - port: {{ include "api-server.database.port" . | int }}
       targetPort: api-database
   selector:
     {{- include "api-server.selectorLabels" . | nindent 4 }}

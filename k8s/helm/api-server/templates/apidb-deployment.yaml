@@ -25,9 +25,10 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.database.image }}"
+          image: "{{ include "api-server.database.image" . }}"
           imagePullPolicy: {{ .Values.image.database.pullPolicy }}
           env:
+{{- if eq .Values.database.provider "mariadb" }}
             - name: MARIADB_USER
               valueFrom:
                 secretKeyRef:
@@ -55,6 +56,29 @@ spec:
           volumeMounts:
             - name: api-database-persistent-storage
               mountPath: /var/lib/mysql
+{{- end }}
+{{- end }}
+{{- if eq .Values.database.provider "derby" }}
+            - name: DBNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.name
+            - name: DERBY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.username
+          ports:
+            - containerPort: 1527
+              name: api-database
+{{- if .Values.database.persistence.enabled }}
+          volumeMounts:
+            - name: api-database-persistent-storage
+              mountPath: /dbs
+{{- end }}
+{{- end }}
+{{- if .Values.database.persistence.enabled }}
       volumes:
         - name: api-database-persistent-storage
           persistentVolumeClaim:

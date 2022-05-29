@@ -28,7 +28,7 @@ Create a database fully qualified name based on the app name
 */}}
 {{- define "api-database.fullname" -}}
 {{- $appName := include "api-server.fullname" . | trunc 60 | trimSuffix "-" }}
-{{- printf "db-%s" $appName }}
+{{- printf "%s-db" $appName }}
 {{- end }}
 
 {{/*
@@ -62,21 +62,25 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "api-server.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "api-server.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
+  {{- if .Values.serviceAccount.create }}
+    {{- default (include "api-server.fullname" .) .Values.serviceAccount.name }}
+  {{- else }}
+    {{- default "default" .Values.serviceAccount.name }}
+  {{- end }}
 {{- end }}
 
 {{/*
 Create profiles template
 */}}
 {{- define "api-server.runtime.profiles" -}}
-{{- .Values.database.provider }}
-{{- if .Values.test.enabled }}
-{{- print ",test" }}
-{{- end }}
+  {{- if and (eq .Values.database.provider "derby") (not .Values.database.embedded) }}
+    {{- print "derbyclient" }}
+  {{- else }}
+    {{- .Values.database.provider }}
+  {{- end }}
+  {{- if .Values.test.enabled }}
+    {{- print ",test" }}
+  {{- end }}
 {{- end }}
 
 {{/*
@@ -90,41 +94,59 @@ Create database hostname
 Create database URL
 */}}
 {{- define "api-server.database.url" -}}
-  {{- if eq .Values.database.provider "mariadb" }}
-    {{- if .Values.database.embedded }}
+  {{- if not .Values.database.embedded }}
+    {{- printf "//%s:%d/%s" (include "api-server.database.hostname" .) (include "api-server.database.port" . | int) .Values.database.databaseName }}
+  {{- else }}
+    {{- if eq .Values.database.provider "mariadb" }}
       {{- fail "MariaDB provider doesn't support embedded database" }}
     {{- else }}
-      {{- printf "//%s" (include "api-server.database.hostname" .) }}
-      {{- if .Values.database.port }}
-        {{- printf ":%d" (.Values.database.port | int) }}
-      {{- end }}
-      {{- printf "/%s" .Values.database.databaseName }}
-    {{- end }}
-  {{- else }}
-    {{- if eq .Values.database.provider "derby" }}
-      {{- if .Values.database.embedded }}
+      {{- if eq .Values.database.provider "derby" }}
         {{- printf "/var/apidb/%s;create=true" .Values.database.databaseName }}
       {{- else }}
-        {{- printf "//%s" (include "api-server.database.hostname" .) }}
-        {{- if .Values.database.port }}
-          {{- printf ":%d" (.Values.database.port | int) }}
-        {{- end }}
-        {{- printf "/%s" .Values.database.databaseName }}
-      {{- end }}
-    {{- else }}
-      {{- if eq .Values.database.provider "h2" }}
-        {{- if .Values.database.embedded }}
+        {{- if eq .Values.database.provider "h2" }}
           {{- printf "/var/apidb/%s;DB_CLOSE_DELAY=-1" .Values.database.databaseName }}
         {{- else }}
-          {{- printf "//%s" (include "api-server.database.hostname" .) }}
-          {{- if .Values.database.port }}
-            {{- printf ":%d" (.Values.database.port | int) }}
-          {{- end }}
-          {{- printf "/%s" .Values.database.databaseName }}
+          {{- fail "Unsupported database provider" }}
         {{- end }}
-      {{- else }}
-        {{- fail "Unsupported database provider" }}
       {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create database image
+*/}}
+{{- define "api-server.database.image" -}}
+  {{- if .Values.database.imageOverride }}
+    {{- .Values.database.imageOverride }}
+  {{- else }}
+    {{- if eq .Values.database.provider "mariadb" }}
+      {{- .Values.database.defaults.mariadb.image }}
+    {{- end }}
+    {{- if eq .Values.database.provider "derby" }}
+      {{- .Values.database.defaults.derby.image }}
+    {{- end }}
+    {{- if eq .Values.database.provider "h2" }}
+      {{- .Values.database.defaults.h2.image }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Create database port
+*/}}
+{{- define "api-server.database.port" -}}
+  {{- if .Values.database.portOverride }}
+    {{- .Values.database.portOverride }}
+  {{- else }}
+    {{- if eq .Values.database.provider "mariadb" }}
+      {{- .Values.database.defaults.mariadb.port }}
+    {{- end }}
+    {{- if eq .Values.database.provider "derby" }}
+      {{- .Values.database.defaults.derby.port }}
+    {{- end }}
+    {{- if eq .Values.database.provider "h2" }}
+      {{- .Values.database.defaults.h2.port }}
     {{- end }}
   {{- end }}
 {{- end }}
