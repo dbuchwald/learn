@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-server.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-server.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "api-server.selectorLabels" . | nindent 6 }}
+      object: api-server
+  template:
+    metadata:
+      labels:
+        {{- include "api-server.selectorLabels" . | nindent 8 }}
+        object: api-server
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: api.runtime.profiles
+            - name: API_DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: api.database.url
+            - name: API_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.username
+            - name: API_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.password
+          ports:
+            - containerPort: 8080
+              name: api-server

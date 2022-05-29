@@ -1,0 +1,21 @@
+{{- if .Values.database.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "api-database.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-server.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.database.persistence.storageClassName }}
+  storageClassName: {{ .Values.database.persistence.storageClassName }}
+  {{- end}}
+  {{- if .Values.database.persistence.volumeName }}
+  volumeName: {{ .Values.database.persistence.volumeName }}
+  {{- end}}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.database.persistence.volumeSize }}
+{{- end -}}

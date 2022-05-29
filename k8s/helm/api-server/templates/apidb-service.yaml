@@ -1,0 +1,17 @@
+{{- if eq (include "api-server.database.detached" .) "true" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "api-database.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-server.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.database.type }}
+  ports:
+    - port: {{ include "api-server.database.port" . }}
+      targetPort: api-database
+  selector:
+    {{- include "api-server.selectorLabels" . | nindent 4 }}
+    object: api-database
+{{- end }}

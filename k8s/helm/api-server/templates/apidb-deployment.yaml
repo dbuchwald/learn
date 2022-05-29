@@ -1,0 +1,63 @@
+{{- if eq (include "api-server.database.detached" .) "true" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "api-database.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-server.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "api-server.selectorLabels" . | nindent 6 }}
+      object: api-database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "api-server.selectorLabels" . | nindent 8 }}
+        object: api-database
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.mariadb.image }}"
+          imagePullPolicy: {{ .Values.image.database.pullPolicy }}
+          env:
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.username
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.password
+            - name: MARIADB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: database.name
+            - name: MYSQL_RANDOM_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "api-server.fullname" . }}
+                  key: mariadb.random_root_password
+          ports:
+            - containerPort: 3306
+              name: api-database
+{{- if .Values.database.persistence.enabled }}
+          volumeMounts:
+            - name: api-database-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: api-database-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "api-database.fullname" . }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "api-server.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "api-server.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.app.type }}
+  ports:
+    - port: {{ .Values.service.app.port }}
+      targetPort: api-server
+  selector:
+    {{- include "api-server.selectorLabels" . | nindent 4 }}
+    object: api-server

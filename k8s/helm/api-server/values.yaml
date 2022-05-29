@@ -1,0 +1,63 @@
+# Default values for api-server.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+test:
+  enabled: true
+database:
+  databaseName: api
+  username: api
+  password: password
+  persistence:
+    enabled: true
+    volumeSize: 1Gi
+    storageClassName:
+    volumeName:
+
+image:
+  repository: docker-registry.local/k8s-learn-api-v1
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: latest
+  database:
+    pullPolicy: IfNotPresent
+
+service:
+  app:
+    type: ClusterIP
+    port: 8080
+  database:
+    type: ClusterIP
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+mariadb:
+  enabled: true
+  image: mariadb:10.7
+  port: "3306"
+
+derby:
+  enabled: false
+  local: true
+  image:
+  port:
+
+h2:
+  enabled: false
+  local: true
+  image:
+  port:
