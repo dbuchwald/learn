@@ -15,7 +15,7 @@ func main() {
     log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
     // Request a greeting message.
-    message, err := greetings.Hello("")
+    message, err := greetings.Hello("Gladys")
     // If an error was returned, print it to the console and
     // exit the program.
     if err != nil {
