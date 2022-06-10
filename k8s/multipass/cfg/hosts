@@ -1,4 +1,0 @@
-10.33.136.10 c1-master c1-master.kube.local 
-10.33.136.11 c1-node1 c1-node1.kube.local 
-10.33.136.12 c1-node2 c1-node2.kube.local
-10.33.136.13 c1-node3 c1-node3.kube.local
