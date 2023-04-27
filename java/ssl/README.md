@@ -53,6 +53,38 @@ You expect the following output:
 Hello World! 
 ```
 
+Test it now with the client application:
+
+```shell
+mvn -f ssl-client/pom.xml clean spring-boot:run
+```
+
+You expect output to be similar to the following:
+
+```
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.0.6)
+
+2023-04-27T20:29:25.355+02:00  INFO 36296 --- [           main] n.d.l.ssl.client.SslClientApplication    : Starting SslClientApplication using Java 17.0.6 with PID 36296 (/home/dawid/Development/learn/java/ssl/ssl-client/target/classes started by dawid in /home/dawid/Development/learn/java/ssl/ssl-client)
+2023-04-27T20:29:25.360+02:00  INFO 36296 --- [           main] n.d.l.ssl.client.SslClientApplication    : No active profile set, falling back to 1 default profile: "default"
+2023-04-27T20:29:25.833+02:00  INFO 36296 --- [           main] n.d.l.ssl.client.SslClientApplication    : Started SslClientApplication in 0.782 seconds (process running for 1.008)
+2023-04-27T20:29:26.030+02:00  INFO 36296 --- [           main] n.d.l.ssl.client.SslClientApplication    : Retrieving greeting from service...
+2023-04-27T20:29:26.132+02:00  INFO 36296 --- [           main] n.d.l.ssl.client.SslClientApplication    : ...done. Got the following message: [Hello World!]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.350 s
+[INFO] Finished at: 2023-04-27T20:29:26+02:00
+[INFO] ------------------------------------------------------------------------
+```
+
 Stop the server (kill `mvn` process).
 
 ## Running server with HTTPS enabled
@@ -154,6 +186,38 @@ curl --verbose --cacert certs/root_ca.pem https://localhost:8443/hello
 < 
 * Connection #0 to host localhost left intact
 Hello World!
+```
+
+Use the client now with support for HTTPS enabled:
+
+```shell
+mvn -f ssl-client/pom.xml -Dspring-boot.run.profiles=https clean spring-boot:run
+```
+
+You expect it to work correctly:
+
+```
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.0.6)
+
+2023-04-27T20:31:26.188+02:00  INFO 36770 --- [           main] n.d.l.ssl.client.SslClientApplication    : Starting SslClientApplication using Java 17.0.6 with PID 36770 (/home/dawid/Development/learn/java/ssl/ssl-client/target/classes started by dawid in /home/dawid/Development/learn/java/ssl/ssl-client)
+2023-04-27T20:31:26.191+02:00  INFO 36770 --- [           main] n.d.l.ssl.client.SslClientApplication    : The following 1 profile is active: "https"
+2023-04-27T20:31:26.705+02:00  INFO 36770 --- [           main] n.d.l.ssl.client.SslClientApplication    : Started SslClientApplication in 0.814 seconds (process running for 1.066)
+2023-04-27T20:31:26.909+02:00  INFO 36770 --- [           main] n.d.l.ssl.client.SslClientApplication    : Retrieving greeting from service...
+2023-04-27T20:31:27.273+02:00  INFO 36770 --- [           main] n.d.l.ssl.client.SslClientApplication    : ...done. Got the following message: [Hello World!]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.835 s
+[INFO] Finished at: 2023-04-27T20:31:27+02:00
+[INFO] ------------------------------------------------------------------------
 ```
 
 Stop the application.
@@ -282,6 +346,38 @@ curl --verbose --cacert certs/root_ca.pem --cert-type P12 --cert ./certs/client-
 < 
 * Connection #0 to host localhost left intact
 Hello World!
+```
+
+Finally, test with the client application (note the same profile as previously):
+
+```shell
+mvn -f ssl-client/pom.xml -Dspring-boot.run.profiles=https clean spring-boot:run
+```
+
+You expect it to run just fine:
+
+```
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.0.6)
+
+2023-04-27T20:32:43.360+02:00  INFO 37089 --- [           main] n.d.l.ssl.client.SslClientApplication    : Starting SslClientApplication using Java 17.0.6 with PID 37089 (/home/dawid/Development/learn/java/ssl/ssl-client/target/classes started by dawid in /home/dawid/Development/learn/java/ssl/ssl-client)
+2023-04-27T20:32:43.364+02:00  INFO 37089 --- [           main] n.d.l.ssl.client.SslClientApplication    : The following 1 profile is active: "https"
+2023-04-27T20:32:43.901+02:00  INFO 37089 --- [           main] n.d.l.ssl.client.SslClientApplication    : Started SslClientApplication in 0.85 seconds (process running for 1.123)
+2023-04-27T20:32:44.113+02:00  INFO 37089 --- [           main] n.d.l.ssl.client.SslClientApplication    : Retrieving greeting from service...
+2023-04-27T20:32:44.587+02:00  INFO 37089 --- [           main] n.d.l.ssl.client.SslClientApplication    : ...done. Got the following message: [Hello World!]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.026 s
+[INFO] Finished at: 2023-04-27T20:32:44+02:00
+[INFO] ------------------------------------------------------------------------
 ```
 
 ## Additional notes/gotchas
@@ -496,3 +592,11 @@ Verify return code: 0 (ok)
 ```
 
 And, obviously, cURL runs fine.
+
+###
+
+Getting detailed logs of SSL handshake with Maven Spring Boot plugin:
+
+```shell
+mvn -f ssl-client/pom.xml -Dspring-boot.run.jvmArguments="-Djavax.net.debug=all" -Dspring-boot.run.profiles=https clean spring-boot:run
+```
