@@ -1,6 +1,7 @@
 package net.dbuchwald.learn.ssl.client.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,8 +13,8 @@ public class GreetingClientService {
 
   private final RestTemplate restTemplate;
 
-  public GreetingClientService(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
+  public GreetingClientService(RestTemplateBuilder builder) {
+    this.restTemplate=builder.build();
   }
 
   public String getGreetingMessage() {

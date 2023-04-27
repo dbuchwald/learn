@@ -1,18 +1,18 @@
 package net.dbuchwald.learn.ssl.client;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
-class SslClientApplicationTests {
+public class SslClientApplicationTest {
 
-	@MockBean
-	RestTemplate restTemplate;
+  @MockBean
+  CommandLineRunner mockCLR;
 
-	@Test
-	void contextLoads() {
-	}
+  @Test
+  void contextLoads() {
+  }
 
 }
