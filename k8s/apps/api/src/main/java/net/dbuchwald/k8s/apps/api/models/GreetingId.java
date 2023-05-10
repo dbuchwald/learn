@@ -2,7 +2,6 @@ package net.dbuchwald.k8s.apps.api.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Embeddable
 public record GreetingId(@Column(name = "lang_id", nullable = false) String langId,

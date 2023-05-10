@@ -3,7 +3,6 @@ package net.dbuchwald.k8s.apps.api.controllers;
 import net.dbuchwald.k8s.apps.api.models.Greeting;
 import net.dbuchwald.k8s.apps.api.models.Language;
 import net.dbuchwald.k8s.apps.api.services.ReferenceDataService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +20,7 @@ public class ReferenceDataControllerV1 {
 
   public static final String REF_DATA_API_V1_ROOT_PATH = "/api/v1/ref-data";
 
-  @Autowired
-  ReferenceDataService referenceDataService;
+  private final ReferenceDataService referenceDataService;
 
   public ReferenceDataControllerV1(ReferenceDataService referenceDataService) {
     this.referenceDataService = referenceDataService;

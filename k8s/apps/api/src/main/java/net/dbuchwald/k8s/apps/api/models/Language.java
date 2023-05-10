@@ -1,7 +1,5 @@
 package net.dbuchwald.k8s.apps.api.models;
 
-import net.dbuchwald.k8s.apps.api.models.constants.LanguageIdentifier;
-
 import javax.persistence.*;
 import java.util.Objects;
 
