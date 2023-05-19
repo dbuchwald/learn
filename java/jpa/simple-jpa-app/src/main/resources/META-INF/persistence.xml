@@ -10,6 +10,7 @@
         value="jdbc:mysql://localhost:3306/simplejpaapp" />
       <property name="javax.persistence.jdbc.user" value="jpasqluser" />
       <property name="javax.persistence.jdbc.password" value="MySQLPassword" />
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
     </properties>
   </persistence-unit>
 </persistence>

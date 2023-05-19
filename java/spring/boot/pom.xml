@@ -23,6 +23,7 @@
         <module>FirstApplication</module>
         <module>RESTFacade</module>
         <module>RESTSecurity</module>
+        <module>JPATutorial</module>
     </modules>
 
 </project>

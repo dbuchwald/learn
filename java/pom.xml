@@ -36,6 +36,8 @@
         <module>mybatis</module>
         <module>junit</module>
         <module>spring</module>
+        <module>ssl/ssl-server</module>
+        <module>ssl/ssl-client</module>
     </modules>
 
     <dependencyManagement>
