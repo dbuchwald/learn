@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,14 +28,12 @@ public class JpaTutorialApplication {
 	public CommandLineRunner run(CustomerManagementService customerManagementService,
 															 IdentifierTypeManagementService identifierTypeManagementService) {
 		return (args) -> {
-			customerManagementService.createCustomer("Dawid", "Buchwald");
-			UUID irenaUUID = customerManagementService.createCustomer("Irena", "Buchwald");
-			customerManagementService.createCustomer("Wiktor", "Buchwald");
-			customerManagementService.createCustomer("Kuba", "Latecki");
 
-			log.info("Customers created");
+			List<CustomerDTO> allCustomers = customerManagementService.findAll();
 
-			for (CustomerDTO customerDTO : customerManagementService.findAll()) {
+			String sampleID = allCustomers.get(0).getId();
+
+			for (CustomerDTO customerDTO : allCustomers) {
 				log.info(customerDTO.toString());
 			}
 
@@ -42,12 +41,12 @@ public class JpaTutorialApplication {
 
 			Optional<CustomerDTO> optionalCustomerDTO = customerManagementService.findCustomerById(UUID.fromString("b09f4c5c-45b0-48aa-a018-695914d20555"));
 			log.info(optionalCustomerDTO.map(CustomerDTO::toString).orElse("Customer with incorrect uuid not found"));
-			optionalCustomerDTO = customerManagementService.findCustomerById(irenaUUID);
-			log.info(optionalCustomerDTO.map(CustomerDTO::toString).orElse("Customer with " + irenaUUID + " not found"));
+			optionalCustomerDTO = customerManagementService.findCustomerById(UUID.fromString(sampleID));
+			log.info(optionalCustomerDTO.map(CustomerDTO::toString).orElse("Customer with " + sampleID + " not found"));
 
 			log.info("find by last name");
 
-			for (CustomerDTO customerDTO : customerManagementService.findCustomerByLastName("Buchwald")) {
+			for (CustomerDTO customerDTO : customerManagementService.findCustomerByLastName("Smith")) {
 				log.info(customerDTO.toString());
 			}
 
@@ -58,5 +57,4 @@ public class JpaTutorialApplication {
 			log.info("That's it");
 		};
 	}
-
 }

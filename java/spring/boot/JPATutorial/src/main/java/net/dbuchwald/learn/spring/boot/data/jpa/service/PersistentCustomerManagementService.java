@@ -5,6 +5,7 @@ import net.dbuchwald.learn.spring.boot.data.jpa.dto.CustomerDTO;
 import net.dbuchwald.learn.spring.boot.data.jpa.entity.Customer;
 import net.dbuchwald.learn.spring.boot.data.jpa.service.mapper.CustomerDTOMapperService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PersistentCustomerManagementService implements CustomerManagementService {
 
   private final CustomerRepository customerRepository;

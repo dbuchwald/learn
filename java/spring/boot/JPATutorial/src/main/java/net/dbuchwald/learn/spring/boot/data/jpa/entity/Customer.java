@@ -2,17 +2,24 @@ package net.dbuchwald.learn.spring.boot.data.jpa.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
 @Entity
+@Table(name = "customer")
 public class Customer {
   @Id
   @GeneratedValue
-  @Column( columnDefinition = "uuid", updatable = false )
+  @Column(columnDefinition = "uuid", updatable = false)
   private UUID id;
   private String firstName;
   private String lastName;
+
+  @OneToMany
+  @JoinColumn(name = "customerId", referencedColumnName = "id")
+  private List<CustomerIdentifier> customerIdentifiers;
 
   @SuppressWarnings("unused")
 
@@ -22,6 +29,7 @@ public class Customer {
   public Customer(String firstName, String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
+    this.customerIdentifiers = new ArrayList<>();
   }
 
   public UUID getId() {
@@ -34,5 +42,9 @@ public class Customer {
 
   public String getLastName() {
     return this.lastName;
+  }
+
+  public List<CustomerIdentifier> getCustomerIdentifiers() {
+    return this.customerIdentifiers;
   }
 }
