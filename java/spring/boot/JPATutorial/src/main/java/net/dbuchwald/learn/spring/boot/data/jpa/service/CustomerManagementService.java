@@ -15,5 +15,7 @@ public interface CustomerManagementService {
 
   List<CustomerDTO> findCustomerByLastName(String lastName);
 
+  Optional<CustomerDTO> findCustomerByIdTypeAndValue(String country, String idType, String value);
+
   List<CustomerDTO> findAll();
 }

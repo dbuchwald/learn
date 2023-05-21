@@ -50,6 +50,16 @@ public class JpaTutorialApplication {
 				log.info(customerDTO.toString());
 			}
 
+			optionalCustomerDTO = customerManagementService.findCustomerByIdTypeAndValue("PL", "NIP", "324-123-14-14");
+			log.info(optionalCustomerDTO.map(CustomerDTO::toString).orElse("Customer not found"));
+
+			optionalCustomerDTO = customerManagementService.findCustomerByIdTypeAndValue("PL", "SSN", "324-123-14-14");
+			log.info(optionalCustomerDTO.map(CustomerDTO::toString).orElse("Customer not found"));
+
+			optionalCustomerDTO = customerManagementService.findCustomerByIdTypeAndValue("PL", "NIP", "324-123-14-11");
+			log.info(optionalCustomerDTO.map(CustomerDTO::toString).orElse("Customer not found"));
+
+
 			for (IdentifierTypeDTO identifierTypeDTO : identifierTypeManagementService.findAll()) {
 				log.info(identifierTypeDTO.toString());
 			}
