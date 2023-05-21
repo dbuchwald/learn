@@ -17,11 +17,7 @@ public class CustomerIdentifierDTOMapperService implements Function<CustomerIden
   }
   @Override
   public CustomerIdentifierDTO apply(CustomerIdentifier customerIdentifier) {
-    return new CustomerIdentifierDTO(customerIdentifier.getCustomer().getId().toString(),
-                                     new IdentifierTypeDTO(customerIdentifier.getIdentifierType().getIdentifierTypeId().getIdentifierCountry(),
-                                                           customerIdentifier.getIdentifierType().getIdentifierTypeId().getIdentifierType(),
-                                                           customerIdentifier.getIdentifierType().getIdentifierDescription()),
+    return new CustomerIdentifierDTO(identifierTypeDTOMapperService.apply(customerIdentifier.getIdentifierType()),
                                      customerIdentifier.getIdentifierValue());
-
   }
 }

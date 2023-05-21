@@ -2,20 +2,13 @@ package net.dbuchwald.learn.spring.boot.data.jpa.dto;
 
 public class CustomerIdentifierDTO {
 
-  private final String id;
-
   private final IdentifierTypeDTO identifierType;
 
   private final String value;
 
-  public CustomerIdentifierDTO(String id, IdentifierTypeDTO identifierType, String value) {
-    this.id = id;
+  public CustomerIdentifierDTO(IdentifierTypeDTO identifierType, String value) {
     this.identifierType = identifierType;
     this.value = value;
-  }
-
-  public String getId() {
-    return id;
   }
 
   public IdentifierTypeDTO getIdentifierType() {
@@ -29,8 +22,7 @@ public class CustomerIdentifierDTO {
   @Override
   public String toString() {
     return "CustomerIdentifierDTO{" +
-        "id='" + id + '\'' +
-        ", identifierType=" + identifierType +
+        "identifierType=" + identifierType +
         ", value='" + value + '\'' +
         '}';
   }

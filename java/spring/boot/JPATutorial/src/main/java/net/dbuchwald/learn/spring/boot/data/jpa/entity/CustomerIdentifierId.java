@@ -8,13 +8,13 @@ import java.util.Objects;
 public class CustomerIdentifierId {
 
   @ManyToOne
-  @JoinColumn(name = "customerId", referencedColumnName = "id")
+  @JoinColumn(name = "customer_id")
   private Customer customer;
 
   @ManyToOne
   @JoinColumns({
-      @JoinColumn(name = "identifierCountry", referencedColumnName = "identifierCountry"),
-      @JoinColumn(name = "identifierType", referencedColumnName = "identifierType")
+      @JoinColumn(name = "identifier_country"),
+      @JoinColumn(name = "identifier_type")
   })
   private IdentifierType identifierType;
 

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -17,12 +16,10 @@ public class Customer {
   private String firstName;
   private String lastName;
 
-  @OneToMany
-  @JoinColumn(name = "customerId", referencedColumnName = "id")
+  @OneToMany(mappedBy = "customerIdentifierId.customer")
   private List<CustomerIdentifier> customerIdentifiers;
 
   @SuppressWarnings("unused")
-
   protected Customer() {
   }
 
