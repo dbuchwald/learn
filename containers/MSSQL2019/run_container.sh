@@ -11,6 +11,8 @@ docker run --env "ACCEPT_EULA=Y" \
 
 docker cp create_database.sql mssql_2019:/tmp/create_database.sql
 
+docker cp reset_database.sql mssql_2019:/tmp/reset_database.sql
+
 docker exec mssql_2019 /opt/mssql-tools/bin/sqlcmd \
             -S localhost \
             -U SA \
