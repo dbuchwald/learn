@@ -3,30 +3,31 @@ package net.dbuchwald.learn.spring.boot.data.jpa.entity;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 public class CustomerIdentifierId {
 
-  @ManyToOne
-  @JoinColumn(name = "customer_id")
-  private Customer customer;
+  @Column(name = "customer_id")
+  private UUID customerId;
 
-  @ManyToOne
-  @JoinColumns({
-      @JoinColumn(name = "identifier_country"),
-      @JoinColumn(name = "identifier_type")
-  })
-  private IdentifierType identifierType;
+  @Column(name = "identifier_id")
+  private Long identifierId;
 
   public CustomerIdentifierId() {
   }
 
-  public Customer getCustomer() {
-    return customer;
+  public CustomerIdentifierId(UUID customerId, Long identifierId) {
+    this.customerId = customerId;
+    this.identifierId = identifierId;
   }
 
-  public IdentifierType getIdentifierType() {
-    return identifierType;
+  public UUID getCustomerId() {
+    return customerId;
+  }
+
+  public Long getIdentifierId() {
+    return identifierId;
   }
 
   @Override
@@ -34,11 +35,11 @@ public class CustomerIdentifierId {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CustomerIdentifierId that = (CustomerIdentifierId) o;
-    return Objects.equals(customer, that.customer) && Objects.equals(identifierType, that.identifierType);
+    return Objects.equals(customerId, that.customerId) && Objects.equals(identifierId, that.identifierId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customer, identifierType);
+    return Objects.hash(customerId, identifierId);
   }
 }

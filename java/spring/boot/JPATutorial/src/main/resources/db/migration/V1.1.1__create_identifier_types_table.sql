@@ -1,8 +1,10 @@
-CREATE TABLE dbo.identifier_type
+CREATE TABLE dbo.identifier_types
 (
-    identifier_country CHAR(3) NOT NULL,
-    identifier_type CHAR(5) NOT NULL,
-    identifier_description VARCHAR(128) NOT NULL,
-    CONSTRAINT PK_identifier_type PRIMARY KEY CLUSTERED (identifier_country, identifier_type)
+    id INT NOT NULL,
+    id_country CHAR(3) NOT NULL,
+    id_type CHAR(5) NOT NULL,
+    description VARCHAR(128) NOT NULL,
+    CONSTRAINT PK_identifier_id PRIMARY KEY CLUSTERED (id),
+    CONSTRAINT AK_identifier_country_type UNIQUE (id_country, id_type)
 );
 

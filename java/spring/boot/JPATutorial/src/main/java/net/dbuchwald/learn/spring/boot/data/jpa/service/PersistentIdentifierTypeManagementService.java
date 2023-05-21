@@ -1,7 +1,6 @@
 package net.dbuchwald.learn.spring.boot.data.jpa.service;
 
 import net.dbuchwald.learn.spring.boot.data.jpa.dto.IdentifierTypeDTO;
-import net.dbuchwald.learn.spring.boot.data.jpa.entity.IdentifierTypeId;
 import net.dbuchwald.learn.spring.boot.data.jpa.repository.IdentifierTypeRepository;
 import net.dbuchwald.learn.spring.boot.data.jpa.service.mapper.IdentifierTypeDTOMapperService;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class PersistentIdentifierTypeManagementService implements IdentifierType
   }
   @Override
   public Optional<IdentifierTypeDTO> findIdentifierType(String country, String type) {
-    return identifierTypeRepository.findById(new IdentifierTypeId(country, type)).map(identifierTypeDTOMapperService);
+    return identifierTypeRepository.findByCountryAndIdType(country, type).map(identifierTypeDTOMapperService);
   }
 
   @Override

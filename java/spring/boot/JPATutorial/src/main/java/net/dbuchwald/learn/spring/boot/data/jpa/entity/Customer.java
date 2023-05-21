@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "customers")
 public class Customer {
   @Id
   @GeneratedValue
@@ -16,7 +16,7 @@ public class Customer {
   private String firstName;
   private String lastName;
 
-  @OneToMany(mappedBy = "customerIdentifierId.customer")
+  @OneToMany(mappedBy = "customer")
   private List<CustomerIdentifier> customerIdentifiers;
 
   @SuppressWarnings("unused")

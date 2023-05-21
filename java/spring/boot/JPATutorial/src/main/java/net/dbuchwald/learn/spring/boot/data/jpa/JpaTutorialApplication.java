@@ -54,6 +54,10 @@ public class JpaTutorialApplication {
 				log.info(identifierTypeDTO.toString());
 			}
 
+			Optional<IdentifierTypeDTO> optionalPeselIdType = identifierTypeManagementService.findIdentifierType("PL", "PESEL");
+
+			log.info(optionalPeselIdType.map(IdentifierTypeDTO::toString).orElse("No entry found for PL/PESEL"));
+
 			log.info("That's it");
 		};
 	}

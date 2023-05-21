@@ -10,8 +10,8 @@ import java.util.function.Function;
 public class IdentifierTypeDTOMapperService implements Function<IdentifierType, IdentifierTypeDTO> {
   @Override
   public IdentifierTypeDTO apply(IdentifierType identifierType) {
-    return new IdentifierTypeDTO(identifierType.getIdentifierTypeId().getIdentifierCountry(),
-                                 identifierType.getIdentifierTypeId().getIdentifierType(),
-                                 identifierType.getIdentifierDescription());
+    return new IdentifierTypeDTO(identifierType.getCountry(),
+                                 identifierType.getIdType(),
+                                 identifierType.getDescription());
   }
 }

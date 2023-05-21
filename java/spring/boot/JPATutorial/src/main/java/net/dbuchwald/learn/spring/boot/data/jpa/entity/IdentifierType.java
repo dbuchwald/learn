@@ -1,31 +1,47 @@
 package net.dbuchwald.learn.spring.boot.data.jpa.entity;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "identifier_type")
+@Table(name = "identifier_types")
 public class IdentifierType {
 
-  @EmbeddedId
-  private IdentifierTypeId identifierTypeId;
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private Long id;
 
-  private String identifierDescription;
+  @Column(name = "id_country")
+  private String country;
+
+  @Column(name = "id_type")
+  private String idType;
+
+  @Column(name = "description")
+  private String description;
 
   protected IdentifierType() {
   }
 
-  public IdentifierType(IdentifierTypeId identifierTypeId, String identifierDescription) {
-    this.identifierTypeId = identifierTypeId;
-    this.identifierDescription = identifierDescription;
+  public IdentifierType(String country, String idType, String description) {
+    this.country = country;
+    this.idType = idType;
+    this.description = description;
   }
 
-  public IdentifierTypeId getIdentifierTypeId() {
-    return identifierTypeId;
+  public Long getId() {
+    return id;
   }
 
-  public String getIdentifierDescription() {
-    return identifierDescription;
+  public String getCountry() {
+    return country;
+  }
+
+  public String getIdType() {
+    return idType;
+  }
+
+  public String getDescription() {
+    return description;
   }
 }

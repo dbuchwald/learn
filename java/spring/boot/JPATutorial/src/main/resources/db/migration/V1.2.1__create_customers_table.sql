@@ -1,4 +1,4 @@
-CREATE TABLE dbo.customer
+CREATE TABLE dbo.customers
 (
     id UNIQUEIDENTIFIER NOT NULL,
     first_name VARCHAR(64),
