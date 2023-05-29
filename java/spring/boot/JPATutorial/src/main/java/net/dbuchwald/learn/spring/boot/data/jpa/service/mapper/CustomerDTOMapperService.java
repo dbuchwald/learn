@@ -12,13 +12,18 @@ public class CustomerDTOMapperService implements Function<Customer, CustomerDTO>
 
   private final CustomerIdentifierDTOMapperService customerIdentifierDTOMapperService;
 
-  public CustomerDTOMapperService(CustomerIdentifierDTOMapperService customerIdentifierDTOMapperService) {
+  private final CustomerAddressDTOMapperService customerAddressDTOMapperService;
+
+  public CustomerDTOMapperService(CustomerIdentifierDTOMapperService customerIdentifierDTOMapperService,
+                                  CustomerAddressDTOMapperService customerAddressDTOMapperService) {
     this.customerIdentifierDTOMapperService = customerIdentifierDTOMapperService;
+    this.customerAddressDTOMapperService = customerAddressDTOMapperService;
   }
   @Override
   public CustomerDTO apply(Customer customer) {
 
     return new CustomerDTO(customer.getId().toString(), customer.getFirstName(), customer.getLastName(),
-        customer.getCustomerIdentifiers().stream().map(customerIdentifierDTOMapperService).collect(Collectors.toList()));
+                           customer.getCustomerIdentifiers().stream().map(customerIdentifierDTOMapperService).collect(Collectors.toList()),
+                           customer.getCustomerAddresses().stream().map(customerAddressDTOMapperService).collect(Collectors.toList()));
   }
 }

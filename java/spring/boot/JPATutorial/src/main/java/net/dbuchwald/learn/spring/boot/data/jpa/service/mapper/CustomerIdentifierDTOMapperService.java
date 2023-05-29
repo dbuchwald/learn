@@ -1,7 +1,6 @@
 package net.dbuchwald.learn.spring.boot.data.jpa.service.mapper;
 
 import net.dbuchwald.learn.spring.boot.data.jpa.dto.CustomerIdentifierDTO;
-import net.dbuchwald.learn.spring.boot.data.jpa.dto.IdentifierTypeDTO;
 import net.dbuchwald.learn.spring.boot.data.jpa.entity.CustomerIdentifier;
 import org.springframework.stereotype.Service;
 

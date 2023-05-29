@@ -19,6 +19,9 @@ public class Customer {
   @OneToMany(mappedBy = "customer")
   private List<CustomerIdentifier> customerIdentifiers;
 
+  @OneToMany(mappedBy = "customer")
+  private List<CustomerAddress> customerAddresses;
+
   @SuppressWarnings("unused")
   protected Customer() {
   }
@@ -27,6 +30,7 @@ public class Customer {
     this.firstName = firstName;
     this.lastName = lastName;
     this.customerIdentifiers = new ArrayList<>();
+    this.customerAddresses = new ArrayList<>();
   }
 
   public UUID getId() {
@@ -43,5 +47,9 @@ public class Customer {
 
   public List<CustomerIdentifier> getCustomerIdentifiers() {
     return this.customerIdentifiers;
+  }
+
+  public List<CustomerAddress> getCustomerAddresses() {
+    return this.customerAddresses;
   }
 }

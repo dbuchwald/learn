@@ -1,6 +1,9 @@
 USE appdb;
 GO
 
+DROP TABLE dbo.customer_addresses;
+GO
+
 DROP TABLE dbo.customer_identifiers;
 GO
 

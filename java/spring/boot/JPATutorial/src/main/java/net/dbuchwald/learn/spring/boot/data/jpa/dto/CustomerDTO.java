@@ -14,11 +14,14 @@ public class CustomerDTO {
 
   private final List<CustomerIdentifierDTO> customerIdentifiers;
 
-  public CustomerDTO(String id, String firstName, String lastName, List<CustomerIdentifierDTO> customerIdentifiers) {
+  private final List<CustomerAddressDTO> customerAddresses;
+
+  public CustomerDTO(String id, String firstName, String lastName, List<CustomerIdentifierDTO> customerIdentifiers, List<CustomerAddressDTO> customerAddresses) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.customerIdentifiers = customerIdentifiers;
+    this.customerAddresses = customerAddresses;
   }
 
   @SuppressWarnings("unused")
@@ -41,13 +44,19 @@ public class CustomerDTO {
     return customerIdentifiers;
   }
 
+  @SuppressWarnings("unused")
+  public List<CustomerAddressDTO> getCustomerAddresses() {
+    return customerAddresses;
+  }
+
   @Override
   public String toString() {
     return "CustomerDTO{" +
         "id='" + id + '\'' +
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
-        ", identifiers=[" + customerIdentifiers.stream().map(CustomerIdentifierDTO::toString).collect(joining(",")) + ']' +
+        ", identifiers=[" + customerIdentifiers.stream().map(CustomerIdentifierDTO::toString).collect(joining(",")) + "]," +
+        ", addresses=[" + customerAddresses.stream().map(CustomerAddressDTO::toString).collect(joining(",")) + ']' +
         '}';
   }
 }
