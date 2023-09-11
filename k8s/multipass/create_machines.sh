@@ -1,5 +1,5 @@
-CONTAINERD_VERSION=1.6.6
-RUNC_VERSION=1.1.3
+CONTAINERD_VERSION=1.7.5
+RUNC_VERSION=1.1.9
 MASTER_NODE="c1-master"
 WORKER_NODES="c1-node1 c1-node2 c1-node3"
 
@@ -42,7 +42,7 @@ fi
 for NODE in ${ALL_NODES}
 do
   echo "Creating ${NODE} machine..."
-  multipass launch --cpus 2 --disk 20G --mem 2G --name $NODE 22.04
+  multipass launch --cpus 2 --disk 20G --memory 4G --name $NODE 23.04
 # This section was required for static IP address, but testing if can be avoided
 #  multipass transfer cfg/${NODE}.01-netcfg.yaml ${NODE}:/tmp/01-netcfg.yaml
 #  multipass exec ${NODE} sudo mv /tmp/01-netcfg.yaml /etc/netplan/
@@ -50,7 +50,8 @@ do
 #  multipass transfer cfg/hosts ${NODE}:/tmp/hosts
 #  multipass exec ${NODE} -- sh -c 'cat /tmp/hosts | sudo tee -a /etc/hosts'
   echo "Transferring SSH public key for easier authentication..."
-  multipass transfer ~/.ssh/id_rsa.pub ${NODE}:/tmp/authorized_keys
+  cp ~/.ssh/id_rsa.pub tmp/id_rsa.pub
+  multipass transfer tmp/id_rsa.pub ${NODE}:/tmp/authorized_keys
   multipass exec ${NODE} -- sh -c 'cat /tmp/authorized_keys | tee -a ~/.ssh/authorized_keys'
 
   echo "Installing containerd..."
@@ -91,10 +92,10 @@ do
   multipass exec ${NODE} -- sudo apt-get install -y apt-transport-https ca-certificates curl
 
   echo "Installing Kubernetes GPG keys..."
-  multipass exec ${NODE} -- sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  multipass exec ${NODE} -- sh -c 'sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
 
   echo "Installing Kubernetes APT repo..."
-  multipass exec ${NODE} -- sh -c 'echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list'
+  multipass exec ${NODE} -- sh -c 'echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list'
 
   echo "Installing Kubernetes binaries..."
   multipass exec ${NODE} -- sudo apt-get update
@@ -113,6 +114,10 @@ echo "Copying Kubernetes configuration file for user..."
 multipass exec ${MASTER_NODE} -- sh -c 'mkdir -p $HOME/.kube'
 multipass exec ${MASTER_NODE} -- sh -c 'sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config'
 multipass exec ${MASTER_NODE} -- sh -c 'sudo chown $(id -u):$(id -g) $HOME/.kube/config'
+multipass exec ${MASTER_NODE} -- sh -c 'cp $HOME/.kube/config /tmp/config'
+multipass transfer ${MASTER_NODE}:/tmp/config tmp/config
+mkdir ~/.kube
+cp tmp/config ~/.kube/config
 
 echo "Installing Pod network plugin..."
 multipass transfer tmp/calico.yaml ${MASTER_NODE}:/tmp/calico.yaml
