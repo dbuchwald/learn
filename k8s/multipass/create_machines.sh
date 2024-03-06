@@ -1,9 +1,6 @@
-CONTAINERD_VERSION=1.7.5
-RUNC_VERSION=1.1.9
-MASTER_NODE="c1-master"
-WORKER_NODES="c1-node1 c1-node2 c1-node3"
+#!/bin/bash
 
-ALL_NODES="${MASTER_NODE} ${WORKER_NODES}"
+source ./env.sh
 
 if [[ ! -d tmp ]]
 then
@@ -32,17 +29,24 @@ then
        --output-document=tmp/runc_v${RUNC_VERSION}.amd64
 fi
 
-if [[ ! -f tmp/calico.yaml ]]
+if [[ "${CNI_PROVIDER}" == "calico" ]] && [[ ! -f tmp/calico.yaml ]]
 then
   echo "Downloading Calico manifest..."
   wget https://projectcalico.docs.tigera.io/manifests/calico.yaml \
        --output-document=tmp/calico.yaml
 fi
 
+if [[ "${CNI_PROVIDER}" == "flannel" ]] && [[ ! -f tmp/kube-flannel.yml ]]
+then
+  echo "Downloading Flannel manifest..."
+  wget https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml \
+       --output-document=tmp/kube-flannel.yml
+fi
+
 for NODE in ${ALL_NODES}
 do
   echo "Creating ${NODE} machine..."
-  multipass launch --cpus 2 --disk 20G --memory 4G --name $NODE 23.04
+  multipass launch --cpus 2 --disk 20G --memory 4G --name $NODE 23.10
 # This section was required for static IP address, but testing if can be avoided
 #  multipass transfer cfg/${NODE}.01-netcfg.yaml ${NODE}:/tmp/01-netcfg.yaml
 #  multipass exec ${NODE} sudo mv /tmp/01-netcfg.yaml /etc/netplan/
@@ -88,8 +92,8 @@ do
   multipass exec ${NODE} -- sudo sysctl --system
 
   echo "Installing prerequisites for Kubernetes installation..."
-  multipass exec ${NODE} -- sudo apt-get update
-  multipass exec ${NODE} -- sudo apt-get install -y apt-transport-https ca-certificates curl
+  multipass exec ${NODE} -- sudo apt update
+  multipass exec ${NODE} -- sudo NEEDRESTART_MODE=a apt install -y apt-transport-https ca-certificates curl
 
   echo "Installing Kubernetes GPG keys..."
   multipass exec ${NODE} -- sh -c 'sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg'
@@ -98,8 +102,8 @@ do
   multipass exec ${NODE} -- sh -c 'echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list'
 
   echo "Installing Kubernetes binaries..."
-  multipass exec ${NODE} -- sudo apt-get update
-  multipass exec ${NODE} -- sudo apt-get install -y kubelet kubeadm kubectl
+  multipass exec ${NODE} -- sudo apt update
+  multipass exec ${NODE} -- sudo NEEDRESTART_MODE=a apt install -y kubelet kubeadm kubectl
   multipass exec ${NODE} -- sudo apt-mark hold kubelet kubeadm kubectl
 
 done
@@ -108,7 +112,7 @@ echo "All nodes ready, installing K8S cluster..."
 
 echo "Initializing master node..."
 # All nodes are ready, init control plane node
-multipass exec ${MASTER_NODE} -- sudo kubeadm init
+multipass exec ${MASTER_NODE} -- sudo kubeadm init ${KUBEADM_INIT_OPTIONS}
 
 echo "Copying Kubernetes configuration file for user..."
 multipass exec ${MASTER_NODE} -- sh -c 'mkdir -p $HOME/.kube'
@@ -119,9 +123,19 @@ multipass transfer ${MASTER_NODE}:/tmp/config tmp/config
 mkdir ~/.kube
 cp tmp/config ~/.kube/config
 
-echo "Installing Pod network plugin..."
-multipass transfer tmp/calico.yaml ${MASTER_NODE}:/tmp/calico.yaml
-multipass exec ${MASTER_NODE} -- sh -c 'kubectl apply -f /tmp/calico.yaml'
+if [[ "${CNI_PROVIDER}" == "calico" ]]
+then 
+  echo "Installing Calico network plugin..."
+  multipass transfer tmp/calico.yaml ${MASTER_NODE}:/tmp/calico.yaml
+  multipass exec ${MASTER_NODE} -- sh -c 'kubectl apply -f /tmp/calico.yaml'
+fi
+
+if [[ "${CNI_PROVIDER}" == "flannel" ]]
+then 
+  echo "Installing Flannel network plugin..."
+  multipass transfer tmp/kube-flannel.yml ${MASTER_NODE}:/tmp/kube-flannel.yml
+  multipass exec ${MASTER_NODE} -- sh -c 'kubectl apply -f /tmp/kube-flannel.yml'
+fi
 
 # Get connection details for worker nodes
 echo "Retrieving init details..."
