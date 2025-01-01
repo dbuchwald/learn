@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+
+members = [
+    "chapter01/hello_cargo",
+    "chapter02/guessing_game", "chapter03/arrays",
+    "chapter03/variables",
+    "chapter03/arrays",
+    "chapter03/functions",
+    "chapter03/loops",
+    "chapter03/fibonacci"
+]
